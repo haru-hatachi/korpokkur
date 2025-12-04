@@ -85,6 +85,32 @@ document.getElementById("convertBtn").addEventListener("click", () => {
             }
         
         code.push("</BlockLED>");
+        }else if (woords[0] === "beep"){
+            code.push("<BlockSound>");
+            if (i == lines.length-1){
+                code.push("  <ConnectIndex>1</ConnectIndex>")
+            }else{
+                code.push("  <ConnectIndex>"+(i+3)+"</ConnectIndex>")
+            }
+            if (i == 0){
+                code.push("  <ConnectIndexBefore>"+(i)+"</ConnectIndexBefore>")
+            }else{
+                code.push("  <ConnectIndexBefore>"+(i+1)+"</ConnectIndexBefore>")
+            }
+            if (woords[1] == "play") {
+                if (woords[1] == "true") {
+                    code.push("  <Loop>true</Loop>");
+                }else {
+                    code.push("  <Loop>false</Loop>");
+                }
+                code.push("  <Mode>MELODY_PLAY</Mode>");
+            }else if (woords[1] == "stop") {
+                code.push("  <Mode>MELODY_STOP</Mode>");
+            }else {
+                code.push("  <Mode>BEEP</Mode>");
+                code.push("  <BeepIndex>"+(woords[1]-1)+"</BeepIndex>");
+            }
+            code.push("</BlockSound>");
         }
     }
 
