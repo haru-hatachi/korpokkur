@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+<meta charset="UTF-8">
+<title>コード変換デモ</title>
+<style>
+textarea { width: 80%; height: 700px; }
+</style>
+</head>
+<body>
+
+    <h2>独自言語コード</h2>
+    <textarea id="input"></textarea>
+
+    <button id="convertBtn">変換してダウンロード</button>
+
+<script>
+document.getElementById("convertBtn").addEventListener("click", () => {
+    const textarea = document.getElementById("input");
+    const text = textarea.value;
+
+    // 1. 改行ごとに配列に分ける
+    const lines = text.split("\n"); // lines[0], lines[1], ... に各行が入る
+
+    console.log("配列の長さ:", lines.length); // 行数を確認
+
+    let code = [];
+    code.push("<BlockStart>")
+    code.push("  <LineCount>1</LineCount>")
+    code.push("  <ConnectIndex>2</ConnectIndex>")
+    code.push("  <ConnectIndexBefore>-1</ConnectIndexBefore>")
+    code.push("</BlockStart>")
+    code.push("<BlockEnd>")
+    code.push("  <LineCount>1</LineCount>")
+    code.push("  <ConnectIndex>-1</ConnectIndex>")
+    code.push("  <ConnectIndexBefore>"+(lines.length+1)+"</ConnectIndexBefore>")
+    code.push("</BlockEnd>")
+
+    // 2. 配列の長さ分繰り返す
+
+    for (let i = 0; i < lines.length; i++) {
+        const woords = lines[i].split(/[, ]/).filter(s => s);
+        if (woords[0] === "led") {
+            code.push("<BlockLED>");
+            if (i == lines.length-1){
+                code.push("  <ConnectIndex>1</ConnectIndex>")
+            }else{
+                code.push("  <ConnectIndex>"+(i+3)+"</ConnectIndex>")
+            }
+            if (i == 0){
+                code.push("  <ConnectIndexBefore>"+(i)+"</ConnectIndexBefore>")
+            }else{
+                code.push("  <ConnectIndexBefore>"+(i+1)+"</ConnectIndexBefore>")
+            }
+            
+            if (woords[1] == "on") {
+                code.push("  <Mode>ON</Mode>");
+                code.push("  <Red>"+(woords[2])+"</Red>");
+                code.push("  <Green>"+(woords[3])+"</Green>");
+                code.push("  <Blue>"+(woords[4])+"</Blue>");
+            }else if (woords[1] == "time"){
+                code.push("  <Mode>ON_TIME</Mode>");
+                code.push("  <Red>"+(woords[2])+"</Red>");
+                code.push("  <Green>"+(woords[3])+"</Green>");
+                code.push("  <Blue>"+(woords[4])+"</Blue>");
+                code.push("  <Time>"+(woords[5])+"</Time>");
+            }else if (woords[1] == "off"){
+                code.push("  <Mode>OFF</Mode>");
+            }else if (woords[1] == "in"){
+                code.push("  <Mode>ON_TIME</Mode>");
+                code.push("  <Red>"+(woords[2])+"</Red>");
+                code.push("  <Green>"+(woords[3])+"</Green>");
+                code.push("  <Blue>"+(woords[4])+"</Blue>");
+                code.push("  <Time>"+(woords[5])+"</Time>");
+                code.push("  <Fade>IN</Fade>");
+            }else if (woords[1] == "out"){
+                code.push("  <Mode>ON_TIME</Mode>");
+                code.push("  <Red>"+(woords[2])+"</Red>");
+                code.push("  <Green>"+(woords[3])+"</Green>");
+                code.push("  <Blue>"+(woords[4])+"</Blue>");
+                code.push("  <Time>"+(woords[5])+"</Time>");
+                code.push("  <Fade>OUT</Fade>");
+
+            }
+        
+        code.push("</BlockLED>");
+        }
+    }
+
+    downloadFile(code.join("\n"), "output.blp");
+});
+
+// ダウンロード関数
+function downloadFile(text, filename) {
+    const blob = new Blob([text], { type: "text/plain" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(a.href);
+}
+</script>
+</body>
+</html>

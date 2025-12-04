@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>LEDコードの書き方</title>
+<style>
+body { font-family: sans-serif; line-height: 1.5; padding: 20px; }
+pre { background: #f0f0f0; padding: 10px; border-radius: 5px; }
+table { border-collapse: collapse; margin-top: 10px; }
+td, th { border: 1px solid #ccc; padding: 5px 10px; }
+</style>
+</head>
+<body>
+
+<h1>LEDコードの書き方</h1>
+
+<p>このページでは、LEDブロックの書き方を説明します。1行につき1ブロック、カンマで区切ったパラメータだけを書きます。書かれていないパラメータは自動でスキップされます。</p>
+
+<h2>基本構文</h2>
+<pre>led{Mode=ON_TIME,Fade=NONE,Red=10,Green=10,Blue=10,Time=0.1,Melody=false}</pre>
+
+<h2>パラメータ一覧</h2>
+<table>
+<tr><th>パラメータ</th><th>値の例</th><th>説明</th></tr>
+<tr><td>Mode</td><td>ON / ON_TIME / OFF</td><td>LEDを点灯／一定時間点灯／消灯</td></tr>
+<tr><td>Fade</td><td>NONE / IN / OUT</td><td>フェード効果（なし／だんだん光る／だんだん消える）</td></tr>
+<tr><td>Red</td><td>0〜10</td><td>赤色の量</td></tr>
+<tr><td>Green</td><td>0〜10</td><td>緑色の量</td></tr>
+<tr><td>Blue</td><td>0〜10</td><td>青色の量</td></tr>
+<tr><td>Time</td><td>0〜9999</td><td>点灯時間（秒）</td></tr>
+<tr><td>Melody</td><td>true / false</td><td>音に連動するかどうか</td></tr>
+</table>
+
+<h2>書き方の例</h2>
+<pre>
+led{Mode=ON_TIME,Fade=NONE,Red=10,Green=10,Blue=10,Time=0.1,Melody=false}
+led{Mode=OFF,Red=0,Green=0,Blue=0}
+led{Mode=ON,Fade=IN,Red=5,Green=0,Blue=5,Time=1.5}
+</pre>
+
+<h2>注意点</h2>
+<ul>
+<li>カンマ `,` を忘れない</li>
+<li>`=` の両端の空白は無視されますが、キーは正確に書く</li>
+<li>値は範囲内で指定（RGBは0〜10）</li>
+</ul>
+
+</body>
+</html>
