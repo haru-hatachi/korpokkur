@@ -8,11 +8,14 @@
         r:0~10 g:0~10 b:0~10 t:0.1~25.5
     led out,r,g,b,t //任意の色のLEDを任意の時間つけ、その後だんだん消えていく
         r:0~10 g:0~10 b:0~10 t:0.1~25.5
-<サウンド>
+<Sound>
     beep n //任意の番号の音を鳴らす
     beep play,a //trueなら連続で音をならす、falseなら音をならす
         a:true,false
     beep stop //音を止める
+<Wait>
+    wait t //任意の時間待つ
+        t:0.1~300
 
 
 引数一覧

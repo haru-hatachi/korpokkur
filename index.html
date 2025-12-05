@@ -3,14 +3,14 @@
 <head>
     <script defer src="https://pyscript.net/latest/pyscript.js"></script>
 <meta charset="UTF-8">
-<title>コード変換デモ</title>
+<title>テキストベースでコロックルをプログラム -コロボックル-</title>
 <style>
 textarea { width: 80%; height: 700px; }
 </style>
 </head>
 <body>
 
-    <h2>独自言語コード</h2>
+    <h2>コロボックル</h2>
     <textarea id="input"></textarea>
 
     <button id="convertBtn">変換してダウンロード</button>
@@ -41,8 +41,9 @@ document.getElementById("convertBtn").addEventListener("click", () => {
 
     for (let i = 0; i < lines.length; i++) {
         const woords = lines[i].split(/[, ]/).filter(s => s);
-        if (woords[0] === "led") {
+        if (woords[0] == "led") {
             code.push("<BlockLED>");
+            code.push("  <LineCount>1</LineCount>")
             if (i == lines.length-1){
                 code.push("  <ConnectIndex>1</ConnectIndex>")
             }else{
@@ -85,8 +86,9 @@ document.getElementById("convertBtn").addEventListener("click", () => {
             }
         
         code.push("</BlockLED>");
-        }else if (woords[0] === "beep"){
+        }else if (woords[0] == "beep"){
             code.push("<BlockSound>");
+            code.push("  <LineCount>1</LineCount>")
             if (i == lines.length-1){
                 code.push("  <ConnectIndex>1</ConnectIndex>")
             }else{
@@ -111,6 +113,21 @@ document.getElementById("convertBtn").addEventListener("click", () => {
                 code.push("  <BeepIndex>"+(woords[1]-1)+"</BeepIndex>");
             }
             code.push("</BlockSound>");
+        }else if (woords[0] == "wait") {
+            code.push("<BlockWait>")
+            code.push("  <LineCount>1</LineCount>")
+            if (i == lines.length-1){
+                code.push("  <ConnectIndex>1</ConnectIndex>")
+            }else{
+                code.push("  <ConnectIndex>"+(i+3)+"</ConnectIndex>")
+            }
+            if (i == 0){
+                code.push("  <ConnectIndexBefore>"+(i)+"</ConnectIndexBefore>")
+            }else{
+                code.push("  <ConnectIndexBefore>"+(i+1)+"</ConnectIndexBefore>")
+            }
+            code.push("  <Time>"+(woords[1])+"</Time>")
+            code.push("</BlockWait>");
         }
     }
 
