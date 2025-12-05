@@ -16,7 +16,10 @@
 <Wait>
     wait t //任意の時間待つ
         t:0.1~300
-
+<Counter>
+    count start //秒カウンタをスタートする
+    count stop //秒カウンタを止める
+    count reset //秒カウンタをリセットする
 
 引数一覧
 r 赤色の量

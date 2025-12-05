@@ -128,6 +128,27 @@ document.getElementById("convertBtn").addEventListener("click", () => {
             }
             code.push("  <Time>"+(woords[1])+"</Time>")
             code.push("</BlockWait>");
+        }else if (woords[0] == "count") {
+            code.push("<BlockCounter>")
+            code.push("  <LineCount>1</LineCount>")
+            if (i == lines.length-1){
+                code.push("  <ConnectIndex>1</ConnectIndex>")
+            }else{
+                code.push("  <ConnectIndex>"+(i+3)+"</ConnectIndex>")
+            }
+            if (i == 0){
+                code.push("  <ConnectIndexBefore>"+(i)+"</ConnectIndexBefore>")
+            }else{
+                code.push("  <ConnectIndexBefore>"+(i+1)+"</ConnectIndexBefore>")
+            }
+            if (woords[1] == "start") {
+                code.push("  <Command>START</Command>")
+            }else if (woords[1] == "stop") {
+                code.push("  <Command>STOP</Command>")
+            }else if (woords[1] == "reset") {
+                code.push("  <Command>RESET</Command>")
+            }
+            code.push("</BlockCounter>");  
         }
     }
 
