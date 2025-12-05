@@ -13,19 +13,27 @@ textarea { width: 80%; height: 700px; }
     <h2>コロボックル</h2>
     <textarea id="input"></textarea>
 
-    <button id="convertBtn">変換してダウンロード</button>
+    <button id="saveBlp">ブロック形式blpで保存</button>
+    <button id="saveFcp">フローチャート形式fcpで保存</button>
 
 <script>
-document.getElementById("convertBtn").addEventListener("click", () => {
+
+document.getElementById("saveBlp").addEventListener("click", () => {
+    saveFile("blp");
+});
+
+document.getElementById("saveFcp").addEventListener("click", () => {
+    saveFile("fcp");
+});
+
+
+function saveFile(ext) {
     const textarea = document.getElementById("input");
     const text = textarea.value;
 
-    // 1. 改行ごとに配列に分ける
-    const lines = text.split("\n"); // lines[0], lines[1], ... に各行が入る
-
-    console.log("配列の長さ:", lines.length); // 行数を確認
-
+    const lines = text.split("\n");
     let code = [];
+
     code.push("<BlockStart>")
     code.push("  <LineCount>1</LineCount>")
     code.push("  <ConnectIndex>2</ConnectIndex>")
@@ -37,10 +45,10 @@ document.getElementById("convertBtn").addEventListener("click", () => {
     code.push("  <ConnectIndexBefore>"+(lines.length+1)+"</ConnectIndexBefore>")
     code.push("</BlockEnd>")
 
-    // 2. 配列の長さ分繰り返す
-
     for (let i = 0; i < lines.length; i++) {
         const woords = lines[i].split(/[, ]/).filter(s => s);
+
+        // --- ここはあなたの元コードそのまま（省略しません） ---
         if (woords[0] == "led") {
             code.push("<BlockLED>");
             code.push("  <LineCount>1</LineCount>")
@@ -82,11 +90,10 @@ document.getElementById("convertBtn").addEventListener("click", () => {
                 code.push("  <Blue>"+(woords[4])+"</Blue>");
                 code.push("  <Time>"+(woords[5])+"</Time>");
                 code.push("  <Fade>OUT</Fade>");
-
             }
-        
-        code.push("</BlockLED>");
-        }else if (woords[0] == "beep"){
+            code.push("</BlockLED>");
+
+        } else if (woords[0] == "beep") {
             code.push("<BlockSound>");
             code.push("  <LineCount>1</LineCount>")
             if (i == lines.length-1){
@@ -113,7 +120,8 @@ document.getElementById("convertBtn").addEventListener("click", () => {
                 code.push("  <BeepIndex>"+(woords[1]-1)+"</BeepIndex>");
             }
             code.push("</BlockSound>");
-        }else if (woords[0] == "wait") {
+
+        } else if (woords[0] == "wait") {
             code.push("<BlockWait>")
             code.push("  <LineCount>1</LineCount>")
             if (i == lines.length-1){
@@ -128,7 +136,8 @@ document.getElementById("convertBtn").addEventListener("click", () => {
             }
             code.push("  <Time>"+(woords[1])+"</Time>")
             code.push("</BlockWait>");
-        }else if (woords[0] == "count") {
+
+        } else if (woords[0] == "count") {
             code.push("<BlockCounter>")
             code.push("  <LineCount>1</LineCount>")
             if (i == lines.length-1){
@@ -148,12 +157,13 @@ document.getElementById("convertBtn").addEventListener("click", () => {
             }else if (woords[1] == "reset") {
                 code.push("  <Command>RESET</Command>")
             }
-            code.push("</BlockCounter>");  
+            code.push("</BlockCounter>");
         }
     }
 
-    downloadFile(code.join("\n"), "output.blp");
-});
+    downloadFile(code.join("\n"), `output.${ext}`);
+}
+
 
 // ダウンロード関数
 function downloadFile(text, filename) {
@@ -164,6 +174,7 @@ function downloadFile(text, filename) {
     a.click();
     URL.revokeObjectURL(a.href);
 }
+
 </script>
 </body>
 </html>
