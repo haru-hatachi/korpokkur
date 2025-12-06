@@ -1,25 +1,61 @@
 <LED>
     led on,r,g,b //任意の色のLEDをつける
-        r:0~10 g:0~10 b:0~10
+        //r:0~10 g:0~10 b:0~10
     led time,r,g,b,t //任意の色のLEDを任意の時間つける
-        r:0~10 g:0~10 b:0~10 t:0.1~25.5
+        //r:0~10 g:0~10 b:0~10 t:0.1~25.5
     led off //LEDをけす
     led in,r,g,b,t //任意の色のLEDをだんだん任意の時間つける(前回の色からだんだん変化する)
-        r:0~10 g:0~10 b:0~10 t:0.1~25.5
+        //r:0~10 g:0~10 b:0~10 t:0.1~25.5
     led out,r,g,b,t //任意の色のLEDを任意の時間つけ、その後だんだん消えていく
-        r:0~10 g:0~10 b:0~10 t:0.1~25.5
+        //r:0~10 g:0~10 b:0~10 t:0.1~25.5
 <Sound>
     beep n //任意の番号の音を鳴らす
     beep play,a //trueなら連続で音をならす、falseなら音をならす
-        a:true,false
+        //a:true,false
     beep stop //音を止める
 <Wait>
     wait t //任意の時間待つ
-        t:0.1~300
+        //t:0.1~300
 <Counter>
     count start //秒カウンタをスタートする
     count stop //秒カウンタを止める
     count reset //秒カウンタをリセットする
+<If>
+    if botton  //ボタンがオンならcを実行
+        c
+        //c:各命令
+    if light s n //明るさがnと比べてsなら
+        c
+        //s:<or>or== n:0~100or変数 c:各命令
+    if sound s n //音がnと比べてsなら
+        c
+        //s:<or>or== n:0~100or変数 c:各命令
+    if alarm //アラーム入力があるなら
+        c
+        //c:各命令
+    if timer //タイマー入力があるなら
+        c
+        //c:各命令
+    if time s n1 n2 //時刻がn1時n2分と比べてsなら
+        c
+        //s:<or>or== n1:0~23 n2:0~59 c:各命令
+    if temp s n //音温度がnと比べてsなら
+        c
+        //s:<or>or== n:-128~127or変数 c:各命令
+    if random //50%の確率で実行
+        c
+        //c:各命令
+    if count s n //秒カウンタがnと比べてなら
+        c
+        //s:<or>or== n:0~255 c:各命令
+    if variable v s n //vがnと比べてsなら
+        c
+        //v:変数名 s:<or>or== n:-128~127or変数 c:各命令
+<else>
+    else //直前のifがfalseならcを実行
+        c
+        //c:各命令
+
 
 引数一覧
 r 赤色の量
@@ -28,3 +64,6 @@ b 青色の量
 t 時間
 n 数字
 a 真偽
+c 命令
+s 符号
+v 変数名

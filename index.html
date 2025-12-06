@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
 <meta charset="UTF-8">
 <title>テキストベースでコロックルをプログラム -コロボックル-</title>
 <style>
@@ -11,12 +10,27 @@ textarea { width: 80%; height: 700px; }
 <body>
 
     <h2>コロボックル</h2>
-    <textarea id="input"></textarea>
+    <textarea id="input" rows="20" cols="60"></textarea>
 
-    <button id="saveBlp">ブロック形式blpで保存</button>
-    <button id="saveFcp">フローチャート形式fcpで保存</button>
+    <button id="saveBlp" tabindex="-1">ブロック形式blpで保存</button>
+    <button id="saveFcp" tabindex="-1">フローチャート形式fcpで保存</button>
 
 <script>
+const editor = document.getElementById("input");
+
+editor.addEventListener("keydown", function(e) {
+    if (e.key === "Tab") {
+        e.stopPropagation();  // 他の処理へ渡さない（重要）
+        e.preventDefault();
+
+        const indent = "    ";
+        const start = editor.selectionStart;
+        const end = editor.selectionEnd;
+
+        editor.setRangeText(indent, start, end, "end");
+    }
+});
+
 
 document.getElementById("saveBlp").addEventListener("click", () => {
     saveFile("blp");
@@ -44,11 +58,30 @@ function saveFile(ext) {
     code.push("  <ConnectIndex>-1</ConnectIndex>")
     code.push("  <ConnectIndexBefore>"+(lines.length+1)+"</ConnectIndexBefore>")
     code.push("</BlockEnd>")
+    
+    const indexes = []
 
     for (let i = 0; i < lines.length; i++) {
         const woords = lines[i].split(/[, ]/).filter(s => s);
 
-        // --- ここはあなたの元コードそのまま（省略しません） ---
+
+        const myindex = (lines[i].match(/^\s*/)[0].length)/4
+        let beforeindex = null;
+        if (indexes.length > 0) {
+            beforeindex = Number(indexes[indexes.length-1].split(",")[1])
+            if (beforeindex == myindex) {
+                if (woords[0] == "else"){
+                    code.splice(Number(indexes[indexes.length-1].split(",")[0]), 0, "  <ConnectIndexElse>"+(i+3)+"</ConnectIndexElse>")
+                }else{
+                    code.splice(Number(indexes[indexes.length-1].split(",")[0]), 0, "  <ConnectIndex>"+(i+2)+"</ConnectIndex>")
+                
+                }
+            }
+
+        }
+
+
+        
         if (woords[0] == "led") {
             code.push("<BlockLED>");
             code.push("  <LineCount>1</LineCount>")
@@ -140,11 +173,6 @@ function saveFile(ext) {
         } else if (woords[0] == "count") {
             code.push("<BlockCounter>")
             code.push("  <LineCount>1</LineCount>")
-            if (i == lines.length-1){
-                code.push("  <ConnectIndex>1</ConnectIndex>")
-            }else{
-                code.push("  <ConnectIndex>"+(i+3)+"</ConnectIndex>")
-            }
             if (i == 0){
                 code.push("  <ConnectIndexBefore>"+(i)+"</ConnectIndexBefore>")
             }else{
@@ -158,7 +186,36 @@ function saveFile(ext) {
                 code.push("  <Command>RESET</Command>")
             }
             code.push("</BlockCounter>");
+        }else if (woords[0] == "if") {
+            code.push("<BlockIf>")
+            code.push("  <LineCount>1</LineCount>")
+            indexes.push(String(code.length)+","+String(myindex))
+            if (i == 0){
+                code.push("  <ConnectIndexBefore>"+(i)+"</ConnectIndexBefore>")
+            }else{
+                code.push("  <ConnectIndexBefore>"+(i+1)+"</ConnectIndexBefore>")
+            }
+            if (woords[1] == "botton") {
+                code.push("  <ConnectIndexBranches>")
+                if (i == lines.length-1){
+                    code.push("    <int>1</int>")
+                }else{
+                    code.push("    <int>"+(i+3)+"</int>")
+                }
+                code.push("  </ConnectIndexBranches>")
+                code.push("  <Condition>BUTTON</Condition>")
+                code.push("  <ConditionNetwork>OBJECT_BUTTON</ConditionNetwork>")
+                code.push("  <Select>BUTTON_ON</Select>")
+
+
+            }
+            code.push("</BlockIf>")
+                
         }
+        
+        
+
+        
     }
 
     downloadFile(code.join("\n"), `output.${ext}`);
