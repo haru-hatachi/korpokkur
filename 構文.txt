@@ -21,7 +21,7 @@
     count stop //秒カウンタを止める
     count reset //秒カウンタをリセットする
 <If>
-    if botton  //ボタンがオンならcを実行
+    if button  //ボタンがオンならcを実行
         c
         //c:各命令
     if light s n //明るさがnと比べてsなら
