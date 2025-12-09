@@ -40,6 +40,29 @@ document.getElementById("saveFcp").addEventListener("click", () => {
     saveFile("fcp");
 });
 
+function connectindex(i,lines,iflast){
+    if (iflast==0) {
+        if (i == lines.length-1){
+            return ("  <ConnectIndex>1</ConnectIndex>")
+        }else{
+            return ("  <ConnectIndex>"+(i+3)+"</ConnectIndex>")
+        }
+        }else {
+            return ("  <ConnectIndex>-1</ConnectIndex>")
+        }
+}
+function connectindexbefore(i,iffast) {
+    if (iffast==0) {
+        if (i == 0){
+            return("  <ConnectIndexBefore>"+(i)+"</ConnectIndexBefore>")
+        }else{
+            return("  <ConnectIndexBefore>"+(i+1)+"</ConnectIndexBefore>")
+        }    
+    }else {
+        return("  <ConnectIndexBefore>-1</ConnectIndexBefore>")
+    }
+}
+
 
 function saveFile(ext) {
     const textarea = document.getElementById("input");
@@ -63,6 +86,8 @@ function saveFile(ext) {
 
     for (let i = 0; i < lines.length; i++) {
         const woords = lines[i].split(/[, ]/).filter(s => s);
+        let iffast = 0;
+        let iflast = 0;
 
 
         const myindex = (lines[i].match(/^\s*/)[0].length)/4
@@ -76,7 +101,16 @@ function saveFile(ext) {
                     code.splice(Number(indexes[indexes.length-1].split(",")[0]), 0, "  <ConnectIndex>"+(i+2)+"</ConnectIndex>")
                 
                 }
+            }else {
+                if (Number(indexes[indexes.length-1].split(",")[0]) == code.length -7) {
+                    iffast = 1
+                }
+                if ((lines[i+1].match(/^\s*/)[0].length)/4 < myindex) {
+                    iflast=1
+                }
+                
             }
+            
 
         }
 
@@ -85,16 +119,8 @@ function saveFile(ext) {
         if (woords[0] == "led") {
             code.push("<BlockLED>");
             code.push("  <LineCount>1</LineCount>")
-            if (i == lines.length-1){
-                code.push("  <ConnectIndex>1</ConnectIndex>")
-            }else{
-                code.push("  <ConnectIndex>"+(i+3)+"</ConnectIndex>")
-            }
-            if (i == 0){
-                code.push("  <ConnectIndexBefore>"+(i)+"</ConnectIndexBefore>")
-            }else{
-                code.push("  <ConnectIndexBefore>"+(i+1)+"</ConnectIndexBefore>")
-            }
+            code.push(connectindex(i,lines,iflast));
+            code.push(connectindexbefore(i,iffast))
             
             if (woords[1] == "on") {
                 code.push("  <Mode>ON</Mode>");
@@ -129,16 +155,8 @@ function saveFile(ext) {
         } else if (woords[0] == "beep") {
             code.push("<BlockSound>");
             code.push("  <LineCount>1</LineCount>")
-            if (i == lines.length-1){
-                code.push("  <ConnectIndex>1</ConnectIndex>")
-            }else{
-                code.push("  <ConnectIndex>"+(i+3)+"</ConnectIndex>")
-            }
-            if (i == 0){
-                code.push("  <ConnectIndexBefore>"+(i)+"</ConnectIndexBefore>")
-            }else{
-                code.push("  <ConnectIndexBefore>"+(i+1)+"</ConnectIndexBefore>")
-            }
+            code.push(connectindex(i,lines,iflast));
+            code.push(connectindexbefore(i,iffast))
             if (woords[1] == "play") {
                 if (woords[1] == "true") {
                     code.push("  <Loop>true</Loop>");
@@ -157,27 +175,16 @@ function saveFile(ext) {
         } else if (woords[0] == "wait") {
             code.push("<BlockWait>")
             code.push("  <LineCount>1</LineCount>")
-            if (i == lines.length-1){
-                code.push("  <ConnectIndex>1</ConnectIndex>")
-            }else{
-                code.push("  <ConnectIndex>"+(i+3)+"</ConnectIndex>")
-            }
-            if (i == 0){
-                code.push("  <ConnectIndexBefore>"+(i)+"</ConnectIndexBefore>")
-            }else{
-                code.push("  <ConnectIndexBefore>"+(i+1)+"</ConnectIndexBefore>")
-            }
+            code.push(connectindex(i,lines,iflast));
+            code.push(connectindexbefore(i,iffast))
             code.push("  <Time>"+(woords[1])+"</Time>")
             code.push("</BlockWait>");
 
         } else if (woords[0] == "count") {
             code.push("<BlockCounter>")
             code.push("  <LineCount>1</LineCount>")
-            if (i == 0){
-                code.push("  <ConnectIndexBefore>"+(i)+"</ConnectIndexBefore>")
-            }else{
-                code.push("  <ConnectIndexBefore>"+(i+1)+"</ConnectIndexBefore>")
-            }
+            code.push(connectindex(i,lines,iflast));
+            code.push(connectindexbefore(i,iffast))
             if (woords[1] == "start") {
                 code.push("  <Command>START</Command>")
             }else if (woords[1] == "stop") {
@@ -190,11 +197,7 @@ function saveFile(ext) {
             code.push("<BlockIf>")
             code.push("  <LineCount>1</LineCount>")
             indexes.push(String(code.length)+","+String(myindex))
-            if (i == 0){
-                code.push("  <ConnectIndexBefore>"+(i)+"</ConnectIndexBefore>")
-            }else{
-                code.push("  <ConnectIndexBefore>"+(i+1)+"</ConnectIndexBefore>")
-            }
+            code.push(connectindexbefore(i,iffast))
             if (woords[1] == "botton") {
                 code.push("  <ConnectIndexBranches>")
                 if (i == lines.length-1){
@@ -208,9 +211,101 @@ function saveFile(ext) {
                 code.push("  <Select>BUTTON_ON</Select>")
 
 
+            }else{
+                if (woords[1] == "light") {
+                    code.push("  <ConnectIndexBranches>")
+                    if (i == lines.length-1){
+                        code.push("    <int>1</int>")
+                    }else{
+                        code.push("    <int>"+(i+3)+"</int>")
+                    }
+                    code.push("  </ConnectIndexBranches>")
+                    code.push("  <Condition>BUTTON</Condition>")
+                    code.push("  <ConditionNetwork>OBJECT_BUTTON</ConditionNetwork>")
+                    code.push("  <Select>BUTTON_ON</Select>")
+
+
+                }
+
             }
+
             code.push("</BlockIf>")
                 
+        }else if (woords[0] == "variable") {
+            let Assignment = 0
+            code.push("<BlockArithmetic>")
+            code.push("  <LineCount>1</LineCount>")
+            code.push(connectindex(i,lines,iflast))
+            code.push(connectindexbefore(i,iffast))
+
+            code.push("  <VariableIndex>")
+            if (woords[1] == "a") {
+                code.push("    <int>0</int>")
+            }else if (woords[1] == "b") {
+                code.push("    <int>1</int>")
+            }else if (woords[1] == "c") {
+                code.push("    <int>2</int>")
+            }else if (woords[1] == "d") {
+                code.push("    <int>3</int>")
+            }else if (woords[1] == "e") {
+                code.push("    <int>4</int>")
+            }else if (woords[1] == "f") {
+                code.push("    <int>5</int>")
+            }else if (woords[1] == "g") {
+                code.push("    <int>6</int>")
+            }else if (woords[1] == "h") {
+                code.push("    <int>7</int>")
+            }
+            if (woords[3] == "a") {
+                code.push("    <int>0</int>")
+                Assignment = "INDEX"
+            }else if (woords[3] == "b") {
+                code.push("    <int>1</int>")
+                Assignment = "INDEX"
+            }else if (woords[3] == "c") {
+                code.push("    <int>2</int>")
+                Assignment = "INDEX"
+            }else if (woords[3] == "d") {
+                code.push("    <int>3</int>")
+                Assignment = "INDEX"
+            }else if (woords[3] == "e") {
+                code.push("    <int>4</int>")
+                Assignment = "INDEX"
+            }else if (woords[3] == "f") {
+                code.push("    <int>5</int>")
+                Assignment = "INDEX"
+            }else if (woords[3] == "g") {
+                code.push("    <int>6</int>")
+                Assignment = "INDEX"
+            }else if (woords[3] == "h") {
+                code.push("    <int>7</int>")
+                Assignment = "INDEX"
+            }else
+                code.push("    <int>0</int>")
+                if (!isNaN(Number(woords[3]))) {
+                    Assignment = "CONST"
+                }else if (woords[3] == "temp") {
+                    Assignment = "TEMPERATURE"
+                }else if (woords[3] == "light") {
+                    Assignment = "LIGHT"
+                }
+            
+            code.push("  </VariableIndex>")
+            if (!isNaN(Number(woords[3]))) {
+                code.push("  <ConstValue>"+(woords[3])+"</ConstValue>")
+            }
+            code.push("  <Variable>"+(Assignment)+"</Variable>")
+
+            if (woords[2] == "=") {
+                code.push("  <Operate>EQUAL</Operate>")
+            }else if (woords[2] == "+=") {
+                code.push("  <Operate>ADD</Operate>")
+            }else if (woords[2] == "-=") {
+                code.push("  <Operate>SUB</Operate>")
+            }
+
+            code.push("</BlockArithmetic>")
+
         }
         
         

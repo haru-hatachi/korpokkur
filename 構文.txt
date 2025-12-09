@@ -50,11 +50,14 @@
         //s:<or>or== n:0~255 c:各命令
     if variable v s n //vがnと比べてsなら
         c
-        //v:変数名 s:<or>or== n:-128~127or変数 c:各命令
+        //v:a~h s:<or>or== n:-128~127or変数 c:各命令
 <else>
     else //直前のifがfalseならcを実行
         c
         //c:各命令
+<variable>
+    variable v s n
+        //v:a~h s:+=or-=or= n:-128~127or変数
 
 
 引数一覧
