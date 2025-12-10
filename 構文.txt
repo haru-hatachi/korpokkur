@@ -27,9 +27,9 @@
     if light s n //明るさがnと比べてsなら
         c
         //s:<or>or== n:0~100or変数 c:各命令
-    if sound s n //音がnと比べてsなら
+    if sound //音がするなら
         c
-        //s:<or>or== n:0~100or変数 c:各命令
+        //c:各命令
     if alarm //アラーム入力があるなら
         c
         //c:各命令
