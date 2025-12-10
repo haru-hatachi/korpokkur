@@ -132,11 +132,11 @@ function saveFile(ext) {
                     
                     }
                 }else {
-                    if (Number(indexes[indexes.length-1].split(",")[0]) == code.length -16) {
+                    if ((lines[i-1].match(/^\s*/)[0].length)/4 < myindex) {
                         iffast = 1
                     }
                     if ((lines[i+1].match(/^\s*/)[0].length)/4 < myindex) {
-                        iflast=1
+                        iflast = 1
                     }
                     
                 }
@@ -299,6 +299,29 @@ function saveFile(ext) {
                     }
                     code.push("  </ConnectIndexBranches>")
                     code.push("  <Condition>SOUND</Condition>")
+                    code.push("  <ConditionNetwork>OBJECT_BUTTON</ConditionNetwork>")
+                    code.push("  <Select>BUTTON_ON</Select>")
+
+                    code.push("  <Values>")
+                    code.push("    <int>0</int>")
+                    code.push("    <int>0</int>")
+                    code.push("  </Values>")
+                    code.push("  <VariableIndexes>")
+                    code.push("    <int>0</int>")
+                    code.push("    <int>0</int>")
+                    code.push("  </VariableIndexes>")
+                    code.push("  <Variable>INVALID</Variable>")
+
+
+                }else if (woords[1] == "alarm") {
+                    code.push("  <ConnectIndexBranches>")
+                    if (i == lines.length-1){
+                        code.push("    <int>1</int>")
+                    }else{
+                        code.push("    <int>"+(i+3)+"</int>")
+                    }
+                    code.push("  </ConnectIndexBranches>")
+                    code.push("  <Condition>ALARM</Condition>")
                     code.push("  <ConditionNetwork>OBJECT_BUTTON</ConditionNetwork>")
                     code.push("  <Select>BUTTON_ON</Select>")
 
