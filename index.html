@@ -359,6 +359,34 @@ function saveFile(ext) {
                     code.push("  <Variable>INVALID</Variable>")
 
 
+                }else if (woords[1] == "time") {
+                    code.push("  <ConnectIndexBranches>")
+                    if (i == lines.length-1){
+                        code.push("    <int>1</int>")
+                    }else{
+                        code.push("    <int>"+(i+3)+"</int>")
+                    }
+                    code.push("  </ConnectIndexBranches>")
+                    code.push("  <Condition>TIME</Condition>")
+                    code.push("  <ConditionNetwork>OBJECT_BUTTON</ConditionNetwork>")
+                    if (woords[2] == "==") {
+                        code.push("  <Select>BUTTON_OFF</Select>")
+                    }else if (woords[2] == ">") {
+                        code.push("  <Select>BUTTON_ON</Select>")
+                    }else if (woords[2] == "<") {
+                        code.push("  <Select>COMPARE_GREATER</Select>")
+                    }
+                    code.push("  <Values>")
+                    code.push("    <int>"+(woords[3])+"</int>")
+                    code.push("    <int>"+(woords[4])+"</int>")
+                    code.push("  </Values>")
+                    code.push("  <VariableIndexes>")
+                    code.push("    <int>0</int>")
+                    code.push("    <int>0</int>")
+                    code.push("  </VariableIndexes>")
+                    code.push("  <Variable>INVALID</Variable>")
+
+
                 }
 
                 code.push("</BlockIf>")
