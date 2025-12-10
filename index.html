@@ -42,9 +42,9 @@ document.getElementById("saveFcp").addEventListener("click", () => {
     saveFile("fcp");
 });
 
-function connectindex(i,lines,iflast){
+function connectindex(i,l,iflast){
     if (iflast==0) {
-        if (i == lines.length-1){
+        if (i == l-2){
             return ("  <ConnectIndex>1</ConnectIndex>")
         }else{
             return ("  <ConnectIndex>"+(i+3)+"</ConnectIndex>")
@@ -72,12 +72,25 @@ function variable_number(name){
         return ("7")
     }
 }
-function connectindexbefore(i,iffast) {
+function before(lines,i,myindex) {
+    for (let j = i - 1; j >= 0; j--) {
+        const ind = lines[j].match(/^\s*/)[0].length / 4;
+        if (ind === myindex) {
+            targetInd = j;
+            break;
+        }
+        
+    }
+    return(targetInd)
+
+}
+function connectindexbefore(i,iffast,lines,myindex) {
     if (iffast==0) {
         if (i == 0){
             return("  <ConnectIndexBefore>"+(i)+"</ConnectIndexBefore>")
         }else{
-            return("  <ConnectIndexBefore>"+(i+1)+"</ConnectIndexBefore>")
+            
+            return("  <ConnectIndexBefore>"+(before(lines,i,myindex)+2)+"</ConnectIndexBefore>")
         }    
     }else {
         return("  <ConnectIndexBefore>-1</ConnectIndexBefore>")
@@ -90,6 +103,11 @@ function saveFile(ext) {
     const text = textarea.value;
 
     const lines = text.split("\n");
+    for (let i = 0; i < lines.length; i++) {
+        if (lines[i].trim() === "") {
+            lines.splice(i, 1);
+        }
+    }
     lines.push("")
     let code = [];
 
@@ -103,16 +121,19 @@ function saveFile(ext) {
     code.push("  <ConnectIndex>-1</ConnectIndex>")
     code.push("</BlockEnd>")
     
-    const indexes = []
+    let indexes = []
     let l = lines.length
     for (let i = 0; i < l; i++) {
         const woords = lines[i].split(/[, ]/).filter(s => s);
+        const myindex = 0
         if (lines[i].trim() === "") {
             i=i-1
             l=l-1
+            code.splice(8, 0, "  <ConnectIndexBefore>"+(before(lines,lines.length-1,myindex)+2)+"</ConnectIndexBefore>")
             if (indexes.length > 0 && i+1==l) {
                 code.splice(Number(indexes[indexes.length-1].split(",")[0]), 0, "  <ConnectIndex>1</ConnectIndex>")
-                code.splice(8, 0, "  <ConnectIndexBefore>"+(i+1)+"</ConnectIndexBefore>")
+                
+                indexes.splice(indexes.length-1, 1)
             }
         }else{
 
@@ -129,7 +150,7 @@ function saveFile(ext) {
                         code.splice(Number(indexes[indexes.length-1].split(",")[0]), 0, "  <ConnectIndexElse>"+(i+3)+"</ConnectIndexElse>")
                     }else{
                         code.splice(Number(indexes[indexes.length-1].split(",")[0]), 0, "  <ConnectIndex>"+(i+2)+"</ConnectIndex>")
-                    
+                        indexes.splice(indexes.length-1, 1)
                     }
                 }else {
                     if ((lines[i-1].match(/^\s*/)[0].length)/4 < myindex) {
@@ -149,8 +170,8 @@ function saveFile(ext) {
             if (woords[0] == "led") {
                 code.push("<BlockLED>");
                 code.push("  <LineCount>1</LineCount>")
-                code.push(connectindex(i,lines,iflast));
-                code.push(connectindexbefore(i,iffast))
+                code.push(connectindex(i,l,iflast));
+                code.push(connectindexbefore(i,iffast,lines,myindex))
                 
                 if (woords[1] == "on") {
                     code.push("  <Mode>ON</Mode>");
@@ -185,8 +206,8 @@ function saveFile(ext) {
             } else if (woords[0] == "beep") {
                 code.push("<BlockSound>");
                 code.push("  <LineCount>1</LineCount>")
-                code.push(connectindex(i,lines,iflast));
-                code.push(connectindexbefore(i,iffast))
+                code.push(connectindex(i,l,iflast));
+                code.push(connectindexbefore(i,iffast,lines,myindex))
                 if (woords[1] == "play") {
                     if (woords[1] == "true") {
                         code.push("  <Loop>true</Loop>");
@@ -205,16 +226,16 @@ function saveFile(ext) {
             } else if (woords[0] == "wait") {
                 code.push("<BlockWait>")
                 code.push("  <LineCount>1</LineCount>")
-                code.push(connectindex(i,lines,iflast));
-                code.push(connectindexbefore(i,iffast))
+                code.push(connectindex(i,l,iflast));
+                code.push(connectindexbefore(i,iffast,lines,myindex))
                 code.push("  <Time>"+(woords[1])+"</Time>")
                 code.push("</BlockWait>");
 
             } else if (woords[0] == "count") {
                 code.push("<BlockCounter>")
                 code.push("  <LineCount>1</LineCount>")
-                code.push(connectindex(i,lines,iflast));
-                code.push(connectindexbefore(i,iffast))
+                code.push(connectindex(i,l,iflast));
+                code.push(connectindexbefore(i,iffast,lines,myindex))
                 if (woords[1] == "start") {
                     code.push("  <Command>START</Command>")
                 }else if (woords[1] == "stop") {
@@ -226,8 +247,8 @@ function saveFile(ext) {
             }else if (woords[0] == "if") {
                 code.push("<BlockIf>")
                 code.push("  <LineCount>1</LineCount>")
-                indexes.push(String(code.length)+","+String(myindex))
-                code.push(connectindexbefore(i,iffast))
+                indexes.push(String(code.length)+","+String(myindex)+","+String(i+2))
+                code.push(connectindexbefore(i,iffast,lines,myindex))
                 if (woords[1] == "button") {
                     code.push("  <ConnectIndexBranches>")
                     if (i == lines.length-1){
@@ -387,6 +408,45 @@ function saveFile(ext) {
                     code.push("  <Variable>INVALID</Variable>")
 
 
+                }else if (woords[1] == "temp") {
+                        code.push("  <ConnectIndexBranches>")
+                        if (i == lines.length-1){
+                            code.push("    <int>1</int>")
+                        }else{
+                            code.push("    <int>"+(i+3)+"</int>")
+                        }
+                        code.push("  </ConnectIndexBranches>")
+                        code.push("  <Condition>TEMPERATURE</Condition>")
+                        code.push("  <ConditionNetwork>OBJECT_BUTTON</ConditionNetwork>")
+                        if (woords[2] == "==") {
+                            code.push("  <Select>BUTTON_OFF</Select>")
+                        }else if (woords[2] == ">") {
+                            code.push("  <Select>COMPARE_GREATER</Select>")
+                        }else if (woords[2] == "<") {
+                            code.push("  <Select>BUTTON_ON</Select>")
+                        }
+
+                        code.push("  <Values>")
+                        if (!isNaN(Number(woords[3]))) {
+                            code.push("    <int>"+(woords[3])+"</int>")
+                            code.push("    <int>0</int>")
+                            code.push("  </Values>")
+                            code.push("  <VariableIndexes>")
+                            code.push("    <int>0</int>")
+                            code.push("    <int>0</int>")
+                            code.push("  </VariableIndexes>")
+                            code.push("  <Variable>CONST</Variable>")
+                        }else {
+                            code.push("    <int>0</int>")
+                            code.push("    <int>0</int>")
+                            code.push("  </Values>")
+                            code.push("  <VariableIndexes>")
+                            code.push("    <int>"+(variable_number(woords[3]))+"</int>")
+                            code.push("    <int>0</int>")
+                            code.push("  </VariableIndexes>")
+                            code.push("  <Variable>INDEX</Variable>")
+
+                        }
                 }
 
                 code.push("</BlockIf>")
@@ -395,8 +455,8 @@ function saveFile(ext) {
                 let Assignment = 0
                 code.push("<BlockArithmetic>")
                 code.push("  <LineCount>1</LineCount>")
-                code.push(connectindex(i,lines,iflast))
-                code.push(connectindexbefore(i,iffast))
+                code.push(connectindex(i,l,iflast))
+                code.push(connectindexbefore(i,iffast,lines,myindex))
 
                 code.push("  <VariableIndex>")
                 if (woords[1] == "a") {
