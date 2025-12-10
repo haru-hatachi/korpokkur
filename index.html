@@ -336,6 +336,29 @@ function saveFile(ext) {
                     code.push("  <Variable>INVALID</Variable>")
 
 
+                }else if (woords[1] == "timer") {
+                    code.push("  <ConnectIndexBranches>")
+                    if (i == lines.length-1){
+                        code.push("    <int>1</int>")
+                    }else{
+                        code.push("    <int>"+(i+3)+"</int>")
+                    }
+                    code.push("  </ConnectIndexBranches>")
+                    code.push("  <Condition>TIMER</Condition>")
+                    code.push("  <ConditionNetwork>OBJECT_BUTTON</ConditionNetwork>")
+                    code.push("  <Select>BUTTON_ON</Select>")
+
+                    code.push("  <Values>")
+                    code.push("    <int>0</int>")
+                    code.push("    <int>0</int>")
+                    code.push("  </Values>")
+                    code.push("  <VariableIndexes>")
+                    code.push("    <int>0</int>")
+                    code.push("    <int>0</int>")
+                    code.push("  </VariableIndexes>")
+                    code.push("  <Variable>INVALID</Variable>")
+
+
                 }
 
                 code.push("</BlockIf>")
