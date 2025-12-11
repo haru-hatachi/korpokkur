@@ -58,6 +58,11 @@
 <variable>
     variable v s n
         //v:a~h s:+=or-=or= n:-128~127or変数
+<for>
+    for //ずっと繰り返す
+    for n //n回繰り返す。
+        //n:数値
+<while>
 
 
 引数一覧

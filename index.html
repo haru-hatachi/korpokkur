@@ -622,7 +622,34 @@ function saveFile(ext) {
 
                 code.push("</BlockArithmetic>")
 
-            }
+            }else if (woords[0] == "for") {
+                code.push("<BlockLoopStart>")
+                code.push("  <LineCount>1</LineCount>")
+                indexes.push(String(code.length)+","+String(myindex)+","+String(i+2))
+                code.push(connectindexbefore(i,iffast,lines,myindex))
+
+                code.push("  <ConnectIndexBranches>")
+                if (i == lines.length-1){
+                    code.push("    <int>1</int>")
+                }else{
+                    code.push("    <int>"+(i+3)+"</int>")
+                }
+                code.push("  </ConnectIndexBranches>")
+                if (woords.length > 1) {
+                    code.push("  <Count>"+(woords[1])+"</Count>")
+                }else {
+                    code.push("  <Count>0</Count>")
+                }
+                code.push("  <BlockLoopEnd>")
+                code.push("    <Variable>CONST</Variable>")
+                code.push("  </BlockLoopEnd>")
+                code.push("</BlockLoopStart>")
+
+
+
+
+
+                }
             
         }
 
