@@ -7,18 +7,98 @@
 <meta name="msvalidate.01" content="6CC00A4A5A2E19F7FFE2EA1E6F3B3A9B" />
 <style>
 textarea { width: 80%; height: 700px; }
+.tabs {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.tab-button {
+  padding: 8px 12px;
+  border: 1px solid #aaa;
+  border-bottom: none;
+  cursor: pointer;
+  background: #eee;
+}
+
+.tab-button.active {
+  background: white;
+  font-weight: bold;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+textarea {
+  width: 100%;
+  height: 600px;
+}
+
 </style>
 </head>
 <body>
 
-    <h1>コロボックル</h2>
-    <textarea id="input" rows="20" cols="60"></textarea>
+    <h1>コロボックル</h1>
+
+<div class="tabs">
+  <button class="tab-button active" data-tab="main">メイン</button>
+  <button class="tab-button" data-tab="sub1">サブ1</button>
+  <button class="tab-button" data-tab="sub2">サブ2</button>
+  <button class="tab-button" data-tab="sub3">サブ3</button>
+  <button class="tab-button" data-tab="sub4">サブ4</button>
+</div>
+
+<div class="tab-content active" id="main">
+  <textarea id="input-main"></textarea>
+</div>
+
+<div class="tab-content" id="sub1">
+  <textarea id="input-sub1"></textarea>
+</div>
+
+<div class="tab-content" id="sub2">
+  <textarea id="input-sub2"></textarea>
+</div>
+
+<div class="tab-content" id="sub3">
+  <textarea id="input-sub3"></textarea>
+</div>
+
+<div class="tab-content" id="sub4">
+  <textarea id="input-sub4"></textarea>
+</div>
+
+
+
+
 
     <button id="saveBlp" tabindex="-1">ブロック形式blpで保存</button>
     <button id="saveFcp" tabindex="-1">フローチャート形式fcpで保存</button>
 
 <script>
-const editor = document.getElementById("input");
+const tabButtons = document.querySelectorAll('.tab-button');
+const tabContents = document.querySelectorAll('.tab-content');
+
+tabButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const tab = btn.dataset.tab;
+
+    // ボタンを更新
+    tabButtons.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    // コンテンツを更新
+    tabContents.forEach(c => c.classList.remove('active'));
+    document.getElementById(tab).classList.add('active');
+  });
+});
+
+
+const editor = document.getElementById("input-main");
 
 editor.addEventListener("keydown", function(e) {
     if (e.key === "Tab") {
@@ -105,7 +185,7 @@ function connectindexbefore(i,iffast,lines,myindex) {
 
 
 function saveFile(ext) {
-    const textarea = document.getElementById("input");
+    const textarea = document.getElementById("input-main");
     const text = textarea.value;
 
     const lines = text.split("\n");
