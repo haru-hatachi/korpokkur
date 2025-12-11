@@ -864,14 +864,52 @@ function saveFile(ext) {
                 code.push("  </BlockLoopEnd>")
                 code.push("</BlockLoopStart>")
 
+            }else if (woords[0] == "disp") {
+                code.push("<BlockDisplay>");
+                code.push("  <LineCount>1</LineCount>")
+                code.push(connectindex(i,l,iflast));
+                code.push(connectindexbefore(i,iffast,lines,myindex))
+                if (woords[1] == "time") {
+                    code.push("  <Mode>TIME</Mode>")
+                }else if (woords[1] == "temp") {
+                    code.push("  <Mode>TEMPERATURE</Mode>")
+                }else if (woords[1] == "count") {
+                    code.push("  <Mode>COUNTER</Mode>")
+                }else if (woords[1] == "light") {
+                    code.push("  <Mode>LIGHT</Mode>")
+                }else if (woords[1] == "wait") {
+                    code.push("  <Mode>WAIT</Mode>")
+                }else if  (["a","b","c","d","e","f","g","h"].includes(woords[1])) {
+                    code.push("  <Mode>VARIABLE</Mode>")
+                    code.push("  <VariableIndex>"+(variable_number(woords[1]))+"</VariableIndex>")
+                }
+                    
+
+
+
+                code.push("</BlockDisplay>");
             }
             
         }
 
             
     }
+    const indexcode = code.map(line => "        " + line);
 
-    downloadFile(code.join("\n"), `output.${ext}`);
+    indexcode.splice(0,0,'<?xml version="1.0" encoding="utf-16"?>','<ProgramModules xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">','  <Version>1</Version>','  <Programs>','    <ProgramModule>','      <Name>メイン</Name>','      <Blocks>')
+
+
+
+
+
+
+
+
+
+
+
+
+    downloadFile(indexcode.join("\n"), `output.${ext}`);
 }
 
 

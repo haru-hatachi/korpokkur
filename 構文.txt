@@ -90,6 +90,14 @@
     while n v s n //vがnと比べてsまでcをn回繰り返し(nがないならずっと)
         c
         //v:a~h s:<or>or== n:-128~127or変数 c:各命令
+<disp>
+    disp time
+    disp temp
+    disp count
+    disp light
+    disp wait
+    disp v
+        //v:a~h
 
 
 引数一覧
