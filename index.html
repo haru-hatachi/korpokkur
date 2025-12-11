@@ -447,6 +447,56 @@ function saveFile(ext) {
                             code.push("  <Variable>INDEX</Variable>")
 
                         }
+                }else if (woords[1] == "random") {
+                    code.push("  <ConnectIndexBranches>")
+                    if (i == lines.length-1){
+                        code.push("    <int>1</int>")
+                    }else{
+                        code.push("    <int>"+(i+3)+"</int>")
+                    }
+                    code.push("  </ConnectIndexBranches>")
+                    code.push("  <Condition>RANDOM</Condition>")
+                    code.push("  <ConditionNetwork>OBJECT_BUTTON</ConditionNetwork>")
+                    code.push("  <Select>BUTTON_ON</Select>")
+
+                    code.push("  <Values>")
+                    code.push("    <int>0</int>")
+                    code.push("    <int>0</int>")
+                    code.push("  </Values>")
+                    code.push("  <VariableIndexes>")
+                    code.push("    <int>0</int>")
+                    code.push("    <int>0</int>")
+                    code.push("  </VariableIndexes>")
+                    code.push("  <Variable>CONST</Variable>")
+
+
+                }else if (woords[1] == "count") {
+                        code.push("  <ConnectIndexBranches>")
+                        if (i == lines.length-1){
+                            code.push("    <int>1</int>")
+                        }else{
+                            code.push("    <int>"+(i+3)+"</int>")
+                        }
+                        code.push("  </ConnectIndexBranches>")
+                        code.push("  <Condition>COUNTER</Condition>")
+                        code.push("  <ConditionNetwork>OBJECT_BUTTON</ConditionNetwork>")
+                        if (woords[2] == "==") {
+                            code.push("  <Select>BUTTON_OFF</Select>")
+                        }else if (woords[2] == ">") {
+                            code.push("  <Select>COMPARE_GREATER</Select>")
+                        }else if (woords[2] == "<") {
+                            code.push("  <Select>BUTTON_ON</Select>")
+                        }
+
+                        code.push("  <Values>")
+                        code.push("    <int>"+(woords[3])+"</int>")
+                        code.push("    <int>0</int>")
+                        code.push("  </Values>")
+                        code.push("  <VariableIndexes>")
+                        code.push("    <int>0</int>")
+                        code.push("    <int>0</int>")
+                        code.push("  </VariableIndexes>")
+                        code.push("  <Variable>CONST</Variable>")
                 }
 
                 code.push("</BlockIf>")
