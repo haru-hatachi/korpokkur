@@ -670,8 +670,9 @@ function saveFile(ext) {
                     code.push("    <int>"+(i+3)+"</int>")
                 }
                 code.push("  </ConnectIndexBranches>")
-                if (woords.length > 1) {
+                if (!isNaN(Number(woords[1]))) {
                     code.push("  <Count>"+(woords[1])+"</Count>")
+                    woords.splice(1,1)
                 }else {
                     code.push("  <Count>0</Count>")
                 }
@@ -681,18 +682,99 @@ function saveFile(ext) {
 
 
                 if (woords.length > 1) {
-                    if (woords[2] == "button") {
+                    if (woords[1] == "button") {
                         code.push("    <Condition>BUTTON</Condition>")
-                        if (woords[3] == "on") {
-                            code.push("    <Select>BUTTON_OFF</Select>")
-                        }else if (woords[3] == "off") {
+                        if (woords[2] == "on") {
                             code.push("    <Select>BUTTON_ON</Select>")
+                        }else if (woords[2] == "off") {
+                            code.push("    <Select>BUTTON_OFF</Select>")
                         }
-                    } 
+                    }else if (woords[1] == "light") {
+                        code.push("    <Condition>LIGHT</Condition>")
+                        code.push("    <ConditionNetwork>OBJECT_BUTTON</ConditionNetwork>")
+                        if (woords[2] == "==") {
+                            code.push("    <Select>COMPARE_GREATER</Select>")
+                        }else if (woords[2] == ">") {
+                            code.push("    <Select>BUTTON_ON</Select>")
+                        }else if (woords[2] == "<") {
+                            code.push("    <Select>BUTTON_OFF</Select>")
+                        }
+
+                        code.push("    <Values>")
+                        if (!isNaN(Number(woords[3]))) {
+                            code.push("      <int>"+(woords[3])+"</int>")
+                            code.push("      <int>0</int>")
+                            code.push("    </Values>")
+                            code.push("    <VariableIndexes>")
+                            code.push("      <int>0</int>")
+                            code.push("      <int>0</int>")
+                            code.push("    </VariableIndexes>")
+                            code.push("    <Variable>CONST</Variable>")
+                        }else {
+                            code.push("      <int>0</int>")
+                            code.push("      <int>0</int>")
+                            code.push("    </Values>")
+                            code.push("    <VariableIndexes>")
+                            code.push("      <int>"+(variable_number(woords[3]))+"</int>")
+                            code.push("      <int>0</int>")
+                            code.push("    </VariableIndexes>")
+                            code.push("    <Variable>INDEX</Variable>")
+
+                        }
+                    }else if (woords[1] == "sound") {
+                        code.push("    <Condition>SOUND</Condition>")
+                        if (woords[2] == "on") {
+                            code.push("    <Select>BUTTON_ON</Select>")
+                        }else if (woords[2] == "off") {
+                            code.push("    <Select>BUTTON_OFF</Select>")
+                        }
+
+                    }else if (woords[1] == "alarm") {
+                        code.push("    <Condition>ALARM</Condition>")
+                        if (woords[2] == "on") {
+                            code.push("    <Select>BUTTON_ON</Select>")
+                        }else if (woords[2] == "off") {
+                            code.push("    <Select>BUTTON_OFF</Select>")
+                        }
+
+                    }else if (woords[1] == "timer") {
+                        code.push("    <Condition>TIMER</Condition>")
+                        if (woords[2] == "on") {
+                            code.push("    <Select>BUTTON_ON</Select>")
+                        }else if (woords[2] == "off") {
+                            code.push("    <Select>BUTTON_OFF</Select>")
+                        }
+
+                    }else if (woords[1] == "time") {
+                        code.push("  <Condition>TIME</Condition>")
+                        code.push("  <ConditionNetwork>OBJECT_BUTTON</ConditionNetwork>")
+                        if (woords[2] == "==") {
+                            code.push("  <Select>BUTTON_OFF</Select>")
+                        }else if (woords[2] == ">") {
+                            code.push("  <Select>BUTTON_ON</Select>")
+                        }else if (woords[2] == "<") {
+                            code.push("  <Select>COMPARE_GREATER</Select>")
+                        }
+                        code.push("  <Values>")
+                        code.push("    <int>"+(woords[3])+"</int>")
+                        code.push("    <int>"+(woords[4])+"</int>")
+                        code.push("  </Values>")
+                        code.push("  <VariableIndexes>")
+                        code.push("    <int>0</int>")
+                        code.push("    <int>0</int>")
+                        code.push("  </VariableIndexes>")
+                        code.push("  <Variable>INVALID</Variable>")
+
+
                 }
 
 
 
+                }
+
+
+
+            
                 code.push("    <Variable>CONST</Variable>")
                 code.push("  </BlockLoopEnd>")
                 code.push("</BlockLoopStart>")
