@@ -21,21 +21,21 @@
     count stop //秒カウンタを止める
     count reset //秒カウンタをリセットする
 <If>
-    if button  //ボタンがオンならcを実行
+    if button o //ボタンがoならcを実行
         c
-        //c:各命令
+        //o:on,off c:各命令
     if light s n //明るさがnと比べてsなら
         c
         //s:<or>or== n:0~100or変数 c:各命令
-    if sound //音がするなら
+    if soundo  //音がするなら
         c
-        //c:各命令
-    if alarm //アラーム入力があるなら
+        //o:on,off c:各命令
+    if alarm o //アラーム入力があるなら
         c
-        //c:各命令
-    if timer //タイマー入力があるなら
+        //o:on,off c:各命令
+    if timer o //タイマー入力があるなら
         c
-        //c:各命令
+        //o:on,off c:各命令
     if time s n1 n2 //時刻がn1時n2分と比べてsなら
         c
         //s:<or>or== n1:0~23 n2:0~59 c:各命令
@@ -63,6 +63,33 @@
     for n //n回繰り返す。
         //n:数値
 <while>
+    while n button o //ボタンがoならcをn回繰り返し(nがないならずっと)
+        c
+        //o:on,off c:各命令
+    while n light s n //明るさがnと比べてsならcをn回繰り返し(nがないならずっと)
+        c
+        //s:<or>or== n:0~100or変数 c:各命令
+    while n soundo  //音がするならcをn回繰り返し(nがないならずっと)
+        c
+        //o:on,off c:各命令
+    while n alarm o //アラーム入力があるならcをn回繰り返し(nがないならずっと)
+        c
+        //o:on,off c:各命令
+    while n timer o //タイマー入力があるならcをn回繰り返し(nがないならずっと)
+        c
+        //o:on,off c:各命令
+    while n time s n1 n2 //時刻がn1時n2分と比べてsならcをn回繰り返し(nがないならずっと)
+        c
+        //s:<or>or== n1:0~23 n2:0~59 c:各命令
+    while n temp s n //音温度がnと比べてsならcをn回繰り返し(nがないならずっと)
+        c
+        //s:<or>or== n:-128~127or変数 c:各命令
+    while n count s n //秒カウンタがnと比べてならcをn回繰り返し(nがないならずっと)
+        c
+        //s:<or>or== n:0~255 c:各命令
+    while n v s n //vがnと比べてsならcをn回繰り返し(nがないならずっと)
+        c
+        //v:a~h s:<or>or== n:-128~127or変数 c:各命令
 
 
 引数一覧
