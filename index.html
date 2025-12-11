@@ -83,6 +83,11 @@ textarea {
 const tabButtons = document.querySelectorAll('.tab-button');
 const tabContents = document.querySelectorAll('.tab-content');
 
+let code = [];
+let indexcode = []
+
+
+
 tabButtons.forEach(btn => {
   btn.addEventListener('click', () => {
     const tab = btn.dataset.tab;
@@ -115,11 +120,49 @@ editor.addEventListener("keydown", function(e) {
 
 
 document.getElementById("saveBlp").addEventListener("click", () => {
-    saveFile("blp");
+    code = [];
+    indexcode = [];
+
+    saveFile("blp","input-main");
+    indexcode.splice(0,0,
+        '<?xml version="1.0" encoding="utf-16"?>',
+        '<ProgramModules xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">',
+        '  <Version>1</Version>',
+        '  <Programs>',
+        '    <ProgramModule>',
+        '      <Name>メイン</Name>',
+        '      <Blocks>'
+    );
+
+    saveFile("blp","input-sub1");
+    saveFile("blp","input-sub2");
+    saveFile("blp","input-sub3");
+    saveFile("blp","input-sub4");
+
+    downloadFile(indexcode.join("\n"), "output.blp");
 });
 
 document.getElementById("saveFcp").addEventListener("click", () => {
-    saveFile("fcp");
+    code = [];
+    indexcode = [];
+
+    saveFile("fcp","input-main");
+    indexcode.splice(0,0,
+        '<?xml version="1.0" encoding="utf-16"?>',
+        '<ProgramModules xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">',
+        '  <Version>1</Version>',
+        '  <Programs>',
+        '    <ProgramModule>',
+        '      <Name>メイン</Name>',
+        '      <Blocks>'
+    );
+
+    saveFile("fcp","input-sub1");
+    saveFile("fcp","input-sub2");
+    saveFile("fcp","input-sub3");
+    saveFile("fcp","input-sub4");
+
+    downloadFile(indexcode.join("\n"), "output.fcp");
 });
 
 function connectindex(i,l,iflast){
@@ -184,8 +227,23 @@ function connectindexbefore(i,iffast,lines,myindex) {
 }
 
 
-function saveFile(ext) {
-    const textarea = document.getElementById("input-main");
+function saveFile(ext,inputname) {
+    code = []
+
+    if (inputname == "input-sub1") {
+        indexcode.push("      </Blocks>","    </ProgramModule>","    <ProgramModule>","      <Name>サブルーチン①</Name>","      <Blocks>")
+    }else if (inputname == "input-sub2") {
+        indexcode.push("      </Blocks>","    </ProgramModule>","    <ProgramModule>","      <Name>サブルーチン②</Name>","      <Blocks>")
+    }else if (inputname == "input-sub3") {
+        indexcode.push("      </Blocks>","    </ProgramModule>","    <ProgramModule>","      <Name>サブルーチン③</Name>","      <Blocks>")
+    }else if (inputname == "input-sub4") {
+        indexcode.push("      </Blocks>","    </ProgramModule>","    <ProgramModule>","      <Name>サブルーチン④</Name>","      <Blocks>")
+    }
+
+
+
+
+    const textarea = document.getElementById(inputname);
     const text = textarea.value;
 
     const lines = text.split("\n");
@@ -195,17 +253,29 @@ function saveFile(ext) {
         }
     }
     lines.push("")
-    let code = [];
+    
+    if (lines.length > 1) {
+        code.push("<BlockStart>")
+        code.push("  <LineCount>1</LineCount>")
+        code.push("  <ConnectIndex>2</ConnectIndex>")
+        code.push("  <ConnectIndexBefore>-1</ConnectIndexBefore>")
+        code.push("</BlockStart>")
+        code.push("<BlockEnd>")
+        code.push("  <LineCount>1</LineCount>")
+        code.push("  <ConnectIndex>-1</ConnectIndex>")
+        code.push("</BlockEnd>")
+    }else {
+        code.push("<BlockStart>")
+        code.push("  <LineCount>1</LineCount>")
+        code.push("  <ConnectIndex>1</ConnectIndex>")
+        code.push("  <ConnectIndexBefore>-1</ConnectIndexBefore>")
+        code.push("</BlockStart>")
+        code.push("<BlockEnd>")
+        code.push("  <LineCount>1</LineCount>")
+        code.push("  <ConnectIndex>-1</ConnectIndex>")
+        code.push("</BlockEnd>")
 
-    code.push("<BlockStart>")
-    code.push("  <LineCount>1</LineCount>")
-    code.push("  <ConnectIndex>2</ConnectIndex>")
-    code.push("  <ConnectIndexBefore>-1</ConnectIndexBefore>")
-    code.push("</BlockStart>")
-    code.push("<BlockEnd>")
-    code.push("  <LineCount>1</LineCount>")
-    code.push("  <ConnectIndex>-1</ConnectIndex>")
-    code.push("</BlockEnd>")
+    }
     
     let indexes = []
     let l = lines.length
@@ -215,7 +285,11 @@ function saveFile(ext) {
         if (lines[i].trim() === "") {
             i=i-1
             l=l-1
-            code.splice(8, 0, "  <ConnectIndexBefore>"+(before(lines,lines.length-1,myindex)+2)+"</ConnectIndexBefore>")
+            if (lines.length > 1) {
+                code.splice(8, 0, "  <ConnectIndexBefore>"+(before(lines,lines.length-1,myindex)+2)+"</ConnectIndexBefore>")
+            }else {
+                code.splice(8, 0, "  <ConnectIndexBefore>0</ConnectIndexBefore>")
+            }
             while (indexes.length > 0) {
                 if (indexes.length == 1) {
                     code.splice(Number(indexes[indexes.length-1].split(",")[0]), 0, "  <ConnectIndex>1</ConnectIndex>")
@@ -998,22 +1072,13 @@ function saveFile(ext) {
 
             
     }
-    const indexcode = code.map(line => "        " + line);
 
-    indexcode.splice(0,0,'<?xml version="1.0" encoding="utf-16"?>','<ProgramModules xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">','  <Version>1</Version>','  <Programs>','    <ProgramModule>','      <Name>メイン</Name>','      <Blocks>')
+    indexcode = [...indexcode,...code.map(line => "        " + line)];
 
-
-
-
-
-
-
-
-
-
-
-
-    downloadFile(indexcode.join("\n"), `output.${ext}`);
+    if (inputname == "input-sub4") {
+            indexcode.push("      </Blocks>","    </ProgramModule>","  </Programs>","  <Report>","    <Grade />","    <Class />","    <Number />","    <Name />","    <Comment />","  </Report>","  <IsBlockMode>true</IsBlockMode>","</ProgramModules>")
+        }
+    
 }
 
 
