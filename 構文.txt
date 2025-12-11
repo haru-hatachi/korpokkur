@@ -48,7 +48,7 @@
     if count s n //秒カウンタがnと比べてなら
         c
         //s:<or>or== n:0~255 c:各命令
-    if variable v s n //vがnと比べてsなら
+    if v s n //vがnと比べてsなら
         c
         //v:a~h s:<or>or== n:-128~127or変数 c:各命令
 <else>
