@@ -73,8 +73,14 @@ function variable_number(name){
     }
 }
 function before(lines,i,myindex) {
+    let ind = 0
     for (let j = i - 1; j >= 0; j--) {
-        const ind = lines[j].match(/^\s*/)[0].length / 4;
+        
+        if (lines[j] == "else") {
+            ind = lines[j].match(/^\s*/)[0].length / 4 + 1;
+        }else {
+            ind = lines[j].match(/^\s*/)[0].length / 4;
+        }
         if (ind === myindex) {
             targetInd = j;
             break;
@@ -147,7 +153,7 @@ function saveFile(ext) {
                 beforeindex = Number(indexes[indexes.length-1].split(",")[1])
                 if (beforeindex == myindex) {
                     if (woords[0] == "else"){
-                        code.splice(Number(indexes[indexes.length-1].split(",")[0]), 0, "  <ConnectIndexElse>"+(i+3)+"</ConnectIndexElse>")
+                        code.splice(Number(indexes[indexes.length-1].split(",")[0]) + 3, 0, "    <int>"+(i+2)+"</int>")
                     }else{
                         code.splice(Number(indexes[indexes.length-1].split(",")[0]), 0, "  <ConnectIndex>"+(i+2)+"</ConnectIndex>")
                         indexes.splice(indexes.length-1, 1)
