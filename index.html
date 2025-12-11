@@ -766,7 +766,92 @@ function saveFile(ext) {
                         code.push("  <Variable>INVALID</Variable>")
 
 
-                }
+                    }else if (woords[1] == "temp") {
+                        code.push("  <Condition>TEMPERATURE</Condition>")
+                        code.push("  <ConditionNetwork>OBJECT_BUTTON</ConditionNetwork>")
+                        if (woords[2] == "==") {
+                            code.push("  <Select>BUTTON_OFF</Select>")
+                        }else if (woords[2] == ">") {
+                            code.push("  <Select>COMPARE_GREATER</Select>")
+                        }else if (woords[2] == "<") {
+                            code.push("  <Select>BUTTON_ON</Select>")
+                        }
+
+                        code.push("  <Values>")
+                        if (!isNaN(Number(woords[3]))) {
+                            code.push("    <int>"+(woords[3])+"</int>")
+                            code.push("    <int>0</int>")
+                            code.push("  </Values>")
+                            code.push("  <VariableIndexes>")
+                            code.push("    <int>0</int>")
+                            code.push("    <int>0</int>")
+                            code.push("  </VariableIndexes>")
+                            code.push("  <Variable>CONST</Variable>")
+                        }else {
+                            code.push("    <int>0</int>")
+                            code.push("    <int>0</int>")
+                            code.push("  </Values>")
+                            code.push("  <VariableIndexes>")
+                            code.push("    <int>"+(variable_number(woords[3]))+"</int>")
+                            code.push("    <int>0</int>")
+                            code.push("  </VariableIndexes>")
+                            code.push("  <Variable>INDEX</Variable>")
+
+                        }
+                    }else if (woords[1] == "count") {
+                        code.push("  <Condition>COUNTER</Condition>")
+                        code.push("  <ConditionNetwork>OBJECT_BUTTON</ConditionNetwork>")
+                        if (woords[2] == "==") {
+                            code.push("  <Select>BUTTON_OFF</Select>")
+                        }else if (woords[2] == ">") {
+                            code.push("  <Select>COMPARE_GREATER</Select>")
+                        }else if (woords[2] == "<") {
+                            code.push("  <Select>BUTTON_ON</Select>")
+                        }
+
+                        code.push("  <Values>")
+                        code.push("    <int>"+(woords[3])+"</int>")
+                        code.push("    <int>0</int>")
+                        code.push("  </Values>")
+                        code.push("  <VariableIndexes>")
+                        code.push("    <int>0</int>")
+                        code.push("    <int>0</int>")
+                        code.push("  </VariableIndexes>")
+                        code.push("  <Variable>CONST</Variable>")
+
+                    }else if (["a","b","c","d","e","f","g","h"].includes(woords[1])) {
+                        code.push("  <Condition>VARIABLE</Condition>")
+                        code.push("  <ConditionNetwork>OBJECT_BUTTON</ConditionNetwork>")
+                        if (woords[2] == "==") {
+                            code.push("  <Select>BUTTON_OFF</Select>")
+                        }else if (woords[2] == ">") {
+                            code.push("  <Select>COMPARE_GREATER</Select>")
+                        }else if (woords[2] == "<") {
+                            code.push("  <Select>BUTTON_ON</Select>")
+                        }
+
+                        code.push("  <Values>")
+                        if (!isNaN(Number(woords[3]))) {
+                            code.push("    <int>"+(woords[3])+"</int>")
+                            code.push("    <int>0</int>")
+                            code.push("  </Values>")
+                            code.push("  <VariableIndexes>")
+                            code.push("    <int>"+(variable_number(woords[1]))+"</int>")
+                            code.push("    <int>0</int>")
+                            code.push("  </VariableIndexes>")
+                            code.push("  <Variable>CONST</Variable>")
+                        }else {
+                            code.push("    <int>0</int>")
+                            code.push("    <int>0</int>")
+                            code.push("  </Values>")
+                            code.push("  <VariableIndexes>")
+                            code.push("    <int>"+(variable_number(woords[1]))+"</int>")
+                            code.push("    <int>"+(variable_number(woords[3]))+"</int>")
+                            code.push("  </VariableIndexes>")
+                            code.push("  <Variable>INDEX</Variable>")
+
+                        }
+                    }
 
 
 
