@@ -27,7 +27,7 @@
     if light s n //明るさがnと比べてsなら
         c
         //s:<or>or== n:0~100or変数 c:各命令
-    if soundo  //音がするなら
+    if sound o //音がするなら
         c
         //o:on,off c:各命令
     if alarm o //アラーム入力があるなら
@@ -98,6 +98,9 @@
     disp wait
     disp v
         //v:a~h
+<sub>
+    sub n
+        //n:1~4
 
 
 引数一覧

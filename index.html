@@ -109,7 +109,7 @@ function saveFile(ext) {
     const text = textarea.value;
 
     const lines = text.split("\n");
-    for (let i = 0; i < lines.length; i++) {
+    for (let i = lines.length - 1; i >= 0; i--) {
         if (lines[i].trim() === "") {
             lines.splice(i, 1);
         }
@@ -136,9 +136,12 @@ function saveFile(ext) {
             i=i-1
             l=l-1
             code.splice(8, 0, "  <ConnectIndexBefore>"+(before(lines,lines.length-1,myindex)+2)+"</ConnectIndexBefore>")
-            if (indexes.length > 0 && i+1==l) {
-                code.splice(Number(indexes[indexes.length-1].split(",")[0]), 0, "  <ConnectIndex>1</ConnectIndex>")
-                
+            while (indexes.length > 0) {
+                if (indexes.length == 1) {
+                    code.splice(Number(indexes[indexes.length-1].split(",")[0]), 0, "  <ConnectIndex>1</ConnectIndex>")
+                }else {
+                    code.splice(Number(indexes[indexes.length-1].split(",")[0]), 0, "  <ConnectIndex>-1</ConnectIndex>")
+                }
                 indexes.splice(indexes.length-1, 1)
             }
         }else{
@@ -151,7 +154,18 @@ function saveFile(ext) {
             let beforeindex = null;
             if (indexes.length > 0) {
                 beforeindex = Number(indexes[indexes.length-1].split(",")[1])
-                if (beforeindex == myindex) {
+                if (beforeindex >= myindex) {
+                    while (beforeindex != myindex) {
+                        if (woords[0] == "else") {
+                            code.splice(Number(indexes[indexes.length-1].split(",")[0]), 0, "  <ConnectIndex>-1</ConnectIndex>")
+                            indexes.splice(indexes.length-1, 1)
+                            beforeindex = Number(indexes[indexes.length-1].split(",")[1])
+                        }else {
+                            code.splice(Number(indexes[indexes.length-1].split(",")[0]), 0, "  <ConnectIndex>"+(i+2)+"</ConnectIndex>")
+                            indexes.splice(indexes.length-1, 1)
+                            beforeindex = Number(indexes[indexes.length-1].split(",")[1])
+                        }
+                    }
                     if (woords[0] == "else"){
                         code.splice(Number(indexes[indexes.length-1].split(",")[0]) + 3, 0, "    <int>"+(i+2)+"</int>")
                     }else{
@@ -888,6 +902,16 @@ function saveFile(ext) {
 
 
                 code.push("</BlockDisplay>");
+
+            }else if (woords[0] == "sub") {
+                code.push("<BlockSubroutine>")
+                code.push("  <LineCount>1</LineCount>")
+                code.push(connectindex(i,l,iflast));
+                code.push(connectindexbefore(i,iffast,lines,myindex))
+
+                code.push("  <Index>"+(woords[1]-1)+"</Index>")
+
+                code.push("</BlockSubroutine>")
             }
             
         }
