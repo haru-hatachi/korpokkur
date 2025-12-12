@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>コロボックル命令一覧</title>
+<style>
+    body { font-family: sans-serif; line-height: 1.7; padding: 20px; }
+    h1 { margin-top: 0; }
+    h2 { border-bottom: 2px solid #ccc; padding-bottom: 4px; }
+    .container { margin-bottom: 40px; }
+    .toc ul { list-style: none; padding-left: 0; }
+    .toc li { margin: 4px 0; }
+    .code { background: #f7f7f7; padding: 10px; border-radius: 6px; white-space: pre-wrap; }
+
+    table {
+        text-align: center;
+        border-collapse: collapse;
+        width: 70%;
+    }
+    th, td {
+        padding: 8px;
+        border: 2px solid #333;
+    }
+    .code {
+        background: #f4f4f4;
+        padding: 10px;
+        border-radius: 5px;
+        font-family: "Courier New", monospace;
+        white-space: pre;
+        margin-top: 10px;
+    }
+    .container {
+        margin-bottom: 40px;
+    }
+</style>
+</head>
+<body>
+
+<h1><a href="index.html" >コロボックル</a>命令一覧</h1>
+
+<!-- 目次 -->
+<div class="toc">
+    <h2>目次</h2>
+    <ul>
+        <li><a href="#led">LED</a></li>
+        <li><a href="#sound">Sound</a></li>
+        <li><a href="#wait">Wait</a></li>
+        <li><a href="#counter">Counter</a></li>
+        <li><a href="#if">If</a></li>
+        <li><a href="#else">Else</a></li>
+        <li><a href="#variable">Variable</a></li>
+        <li><a href="#for">For</a></li>
+        <li><a href="#until">Until</a></li>
+        <li><a href="#disp">Disp</a></li>
+        <li><a href="#sub">Sub</a></li>
+    </ul>
+</div>
+
+
+<!-- LED -->
+<div id="led" class="container">
+<h2>LED</h2>
+
+<table>
+    <tr>
+        <th>カテゴリ</th>
+        <th>命令</th>
+        <th>引数1</th>
+        <th>引数2</th>
+        <th>引数3</th>
+        <th>引数4</th>
+        <th>説明</th>
+    </tr>
+
+    <tr>
+        <td>led</td>
+        <td>on</td>
+        <td>0~10</td>
+        <td>0~10</td>
+        <td>0~10</td>
+        <td>—</td>
+        <td>ledを指定の色でつける</td>
+    </tr>
+
+    <tr>
+        <td>led</td>
+        <td>time</td>
+        <td>0~10</td>
+        <td>0~10</td>
+        <td>0~10</td>
+        <td>0.1~25.5</td>
+        <td>ledを指定の色、指定の秒数つける</td>
+    </tr>
+
+    <tr>
+        <td>led</td>
+        <td>off</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>ledを消す</td>
+    </tr>
+
+    <tr>
+        <td>led</td>
+        <td>in</td>
+        <td>0~10</td>
+        <td>0~10</td>
+        <td>0~10</td>
+        <td>0.1~25.5</td>
+        <td>ledを指定の色、指定の秒数フェードインする</td>
+    </tr>
+
+    <tr>
+        <td>led</td>
+        <td>out</td>
+        <td>0~10</td>
+        <td>0~10</td>
+        <td>0~10</td>
+        <td>0.1~25.5</td>
+        <td>ledを指定の色、指定の秒数フェードアウトする</td>
+    </tr>
+</table>
+
+<p>引数1~3はそれぞれ赤,緑,青の量です。</p>
+
+<div class="code">
+    # 赤色のledをつける
+    led on 10 0 0
+
+    # 緑色のledを1秒つける
+    led time 0 10 0 1
+
+    # ledを消す
+    led off
+
+    # 1秒で青色に変わっていく
+    led in 0 0 10 1
+
+    # 1秒で黄色が消えていく
+    led out 10 10 0 1
+</div>
+
+</div>
+
+<!-- Sound -->
+<div id="sound" class="container">
+<h2>Sound</h2>
+
+<table>
+    <tr>
+        <th>カテゴリ</th>
+        <th>命令</th>
+        <th>引数1</th>
+        <th>引数2</th>
+        <th>引数3</th>
+        <th>引数4</th>
+        <th>説明</th>
+    </tr>
+
+    <tr>
+        <td>sound</td>
+        <td>beep</td>
+        <td>1〜4</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>指定番号の音を鳴らす</td>
+    </tr>
+
+    <tr>
+        <td>sound</td>
+        <td>play</td>
+        <td>true / false</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>trueなら連続で音を鳴らし、falseなら1回だけ鳴らす</td>
+    </tr>
+
+    <tr>
+        <td>sound</td>
+        <td>stop</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>現在鳴っている音を止める</td>
+    </tr>
+</table>
+
+
+
+<div class="code">
+    # 番号5の音を鳴らす
+    sound beep 5
+
+    # 連続で音を鳴らす
+    sound play true
+
+    # 1回だけ音を鳴らす
+    sound play false
+
+    # 音を止める
+    sound stop
+</div>
+
+</div>
+
+
+<!-- Wait -->
+<div id="wait" class="container">
+<h2>Wait</h2>
+
+<table>
+    <tr>
+        <th>カテゴリ</th>
+        <th>命令</th>
+        <th>引数1</th>
+        <th>引数2</th>
+        <th>引数3</th>
+        <th>引数4</th>
+        <th>説明</th>
+    </tr>
+
+    <tr>
+        <td>wait</td>
+        <td>wait</td>
+        <td>0.1〜300</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>指定した秒数だけ待つ</td>
+    </tr>
+</table>
+
+<p>引数1は待機時間（秒）です。</p>
+
+<div class="code">
+    # 1秒待つ
+    wait 1
+
+    # 0.5秒待つ
+    wait 0.5
+
+    # 10秒待つ
+    wait 10
+</div>
+
+</div>
+
+
+<!-- Counter -->
+<div id="counter" class="container">
+<h2>Counter</h2>
+
+<table>
+    <tr>
+        <th>カテゴリ</th>
+        <th>命令</th>
+        <th>引数1</th>
+        <th>引数2</th>
+        <th>引数3</th>
+        <th>引数4</th>
+        <th>説明</th>
+    </tr>
+
+    <tr>
+        <td>count</td>
+        <td>start</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>秒カウンタをスタートする</td>
+    </tr>
+
+    <tr>
+        <td>count</td>
+        <td>stop</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>秒カウンタを止める</td>
+    </tr>
+
+    <tr>
+        <td>count</td>
+        <td>reset</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>秒カウンタをリセットする</td>
+    </tr>
+</table>
+
+<p>count は秒カウンタの制御に使用します。</p>
+
+<div class="code">
+    # カウンタをスタート
+    count start
+
+    # 数秒後にカウンタを止める
+    count stop
+
+    # カウンタ値をリセット
+    count reset
+</div>
+
+</div>
+
+
+<!-- IF -->
+<div id="if" class="container">
+<h2>If（条件分岐）</h2>
+
+<table>
+    <tr>
+        <th>カテゴリ</th>
+        <th>命令</th>
+        <th>引数1</th>
+        <th>引数2</th>
+        <th>引数3</th>
+        <th>引数4</th>
+        <th>説明</th>
+    </tr>
+
+    <tr>
+        <td>if</td>
+        <td>button</td>
+        <td>on / off</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>ボタンが指定状態なら命令を実行</td>
+    </tr>
+
+    <tr>
+        <td>if</td>
+        <td>light</td>
+        <td>&lt; / &gt; / ==</td>
+        <td>0~100 または変数</td>
+        <td>—</td>
+        <td>—</td>
+        <td>明るさを比較して条件成立なら実行</td>
+    </tr>
+
+    <tr>
+        <td>if</td>
+        <td>sound</td>
+        <td>on / off</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>音の有無で実行</td>
+    </tr>
+
+    <tr>
+        <td>if</td>
+        <td>alarm</td>
+        <td>on / off</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>アラーム入力で実行</td>
+    </tr>
+
+    <tr>
+        <td>if</td>
+        <td>timer</td>
+        <td>on / off</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>タイマー入力で実行</td>
+    </tr>
+
+    <tr>
+        <td>if</td>
+        <td>time</td>
+        <td>&lt; / &gt; / ==</td>
+        <td>0~23（時）</td>
+        <td>0~59（分）</td>
+        <td>—</td>
+        <td>時刻を比較して実行</td>
+    </tr>
+
+    <tr>
+        <td>if</td>
+        <td>temp</td>
+        <td>&lt; / &gt; / ==</td>
+        <td>-128~127 または変数</td>
+        <td>—</td>
+        <td>—</td>
+        <td>温度の比較で実行</td>
+    </tr>
+
+    <tr>
+        <td>if</td>
+        <td>random</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>50% の確率で実行</td>
+    </tr>
+
+    <tr>
+        <td>if</td>
+        <td>count</td>
+        <td>&lt; / &gt; / ==</td>
+        <td>0~255</td>
+        <td>—</td>
+        <td>—</td>
+        <td>秒カウンタと比較して実行</td>
+    </tr>
+
+    <tr>
+        <td>if</td>
+        <td>—</td>
+        <td>a~h（変数）</td>
+        <td>&lt; / &gt; / ==</td>
+        <td>-128~127 または変数</td>
+        <td>—</td>
+        <td>変数を比較して実行</td>
+    </tr>
+
+</table>
+
+<div class="code">
+# ボタンが押されているならLEDをつける
+if button on
+    led on 10 0 0
+
+# 明るさが50より大きいなら音を鳴らす
+if light > 50
+    beep 1
+
+# 50% の確率でLEDを消す
+if random
+    led off
+</div>
+
+</div>
+
+
+<!-- ELSE -->
+<div id="else" class="container">
+<h2>Else（if が実行されなかった場合）</h2>
+
+<table>
+    <tr>
+        <th>カテゴリ</th>
+        <th>命令</th>
+        <td>引数1</td>
+        <td>引数2</td>
+        <td>引数3</td>
+        <td>引数4</td>
+        <th>説明</th>
+    </tr>
+
+    <tr>
+        <td>else</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>直前の if が false のとき命令を実行</td>
+    </tr>
+</table>
+
+<div class="code">
+# ボタンが押されていたらledをつけ、押されていなかったらledを消す
+if button on
+    led on 10 0 0
+else
+    led off
+</div>
+
+</div>
+
+
+<!-- VARIABLE -->
+<div id="variable" class="container">
+<h2>Variable（変数）</h2>
+
+<table>
+    <tr>
+        <th>カテゴリ</th>
+        <th>命令</th>
+        <th>引数1</th>
+        <th>引数2</th>
+        <th>引数3</th>
+        <th>引数4</th>
+        <th>説明</th>
+    </tr>
+
+    <tr>
+        <td>variable</td>
+        <td>—</td>
+        <td>a ~ h</td>
+        <td>+= / -= / =</td>
+        <td>-128 ~ 127 または変数</td>
+        <td>—</td>
+        <td>変数に値を代入したり、加算・減算する</td>
+    </tr>
+</table>
+<p>引数1の変数に引数3の値で引数2の操作をします。</p>
+<div class="code">
+# a に 10 を代入
+variable a = 10
+
+# b に 1 を足す
+variable b += 1
+
+# c から 5 を引く
+variable c -= 5
+
+# d に e の値を代入
+variable d = e
+</div>
+
+</div>
+
+<!-- FOR -->
+<div id="for" class="container">
+<h2>For（繰り返し）</h2>
+
+<table>
+    <tr>
+        <th>カテゴリ</th>
+        <th>命令</th>
+        <th>引数1</th>
+        <th>引数2</th>
+        <th>引数3</th>
+        <th>引数4</th>
+        <th>説明</th>
+    </tr>
+
+    <tr>
+        <td>for</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>ずっと繰り返す（無限ループ）</td>
+    </tr>
+
+    <tr>
+        <td>for</td>
+        <td>—</td>
+        <td>1~225</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>指定回数だけ繰り返す</td>
+    </tr>
+</table>
+
+<div class="code">
+# 無限ループ
+for
+    led on 10 0 0
+
+# 5回だけ繰り返す
+for 5
+    beep 3
+</div>
+
+</div>
+
+
+<!-- UNTIL -->
+<div id="until" class="container">
+<h2>Until（条件まで繰り返す）</h2>
+
+<table>
+    <tr>
+        <th>カテゴリ</th>
+        <th>命令</th>
+        <th>引数1</th>
+        <th>引数2</th>
+        <th>引数3</th>
+        <th>引数4</th>
+        <th>説明</th>
+    </tr>
+
+    <tr>
+        <td>until</td>
+        <td>button</td>
+        <td>1~225/a~h</td>
+        <td>on/off</td>
+        <td>—</td>
+        <td>—</td>
+        <td>ボタンが指定状態になるまで繰り返す</td>
+    </tr>
+
+    <tr>
+        <td>until</td>
+        <td>light</td>
+        <td>1~225/a~h</td>
+        <td>&lt; / &gt; / ==</td>
+        <td>0~100 または変数</td>
+        <td>—</td>
+        <td>明るさが比較条件を満たすまで繰り返す</td>
+    </tr>
+
+    <tr>
+        <td>until</td>
+        <td>sound</td>
+        <td>1~225/a~h</td>
+        <td>on/off</td>
+        <td>—</td>
+        <td>—</td>
+        <td>音が条件を満たすまで繰り返す</td>
+    </tr>
+
+    <tr>
+        <td>until</td>
+        <td>alarm</td>
+        <td>1~225/a~h</td>
+        <td>on/off</td>
+        <td>—</td>
+        <td>—</td>
+        <td>アラーム入力が条件を満たすまで繰り返す</td>
+    </tr>
+
+    <tr>
+        <td>until</td>
+        <td>timer</td>
+        <td>1~225/a~h</td>
+        <td>on/off</td>
+        <td>—</td>
+        <td>—</td>
+        <td>タイマー入力が条件を満たすまで繰り返す</td>
+    </tr>
+
+    <tr>
+        <td>until</td>
+        <td>time</td>
+        <td>1~225/a~h</td>
+        <td>&lt; / &gt; / ==</td>
+        <td>0~23（時）</td>
+        <td>0~59（分）</td>
+        <td>時刻が条件を満たすまで繰り返す</td>
+    </tr>
+
+    <tr>
+        <td>until</td>
+        <td>temp</td>
+        <td>1~225/a~h</td>
+        <td>&lt; / &gt; / ==</td>
+        <td>-128~127 または変数</td>
+        <td>—</td>
+        <td>温度が条件を満たすまで繰り返す</td>
+    </tr>
+
+    <tr>
+        <td>until</td>
+        <td>count</td>
+        <td>1~225/a~h</td>
+        <td>&lt; / &gt; / ==</td>
+        <td>0~255</td>
+        <td>—</td>
+        <td>秒カウンタが条件を満たすまで繰り返す</td>
+    </tr>
+
+    <tr>
+        <td>until</td>
+        <td>—</td>
+        <td>1~225/a~h</td>
+        <td>&lt; / &gt; / ==</td>
+        <td>a~h（変数）</td>
+        <td>-128~127 または変数</td>
+        <td>変数が条件を満たすまで繰り返す</td>
+    </tr>
+
+</table>
+
+<div class="code">
+# ボタンが on になるまで繰り返す
+until button on
+    beep 1
+
+# 最大10回、明るさが50未満になるまで繰り返す
+until 10 light < 50
+    led on 10 10 0
+</div>
+
+</div>
+
+
+<!-- DISP -->
+<div id="disp" class="container">
+<h2>Disp</h2>
+
+<table>
+    <tr>
+        <th>カテゴリ</th>
+        <th>命令</th>
+        <th>引数1</th>
+        <th>引数2</th>
+        <th>引数3</th>
+        <th>引数4</th>
+        <th>説明</th>
+    </tr>
+
+    <tr>
+        <td>disp</td>
+        <td>time</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>画面に時刻を表示する</td>
+    </tr>
+
+    <tr>
+        <td>disp</td>
+        <td>temp</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>画面に温度を表示する</td>
+    </tr>
+
+    <tr>
+        <td>disp</td>
+        <td>count</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>画面に秒カウンタを表示する</td>
+    </tr>
+
+    <tr>
+        <td>disp</td>
+        <td>light</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>画面に明るさを表示する</td>
+    </tr>
+
+    <tr>
+        <td>disp</td>
+        <td>wait</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>画面にウェイト時間を表示する</td>
+    </tr>
+
+    <tr>
+        <td>disp</td>
+        <td>—</td>
+        <td>a~h</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>画面に変数を表示する</td>
+    </tr>
+
+    <tr>
+        <td>disp</td>
+        <td>off</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>画面を消す</td>
+    </tr>
+</table>
+
+<div class="code">
+    # 時刻を表示する
+    disp time
+
+    # 温度を表示する
+    disp temp
+
+    # 変数aを表示する
+    disp v a
+
+    # 画面を消す
+    disp off
+</div>
+
+</div>
+
+
+<!-- SUB -->
+<div id="sub" class="container">
+<h2>Sub</h2>
+
+<table>
+    <tr>
+        <th>カテゴリ</th>
+        <th>命令</th>
+        <th>引数1</th>
+        <th>引数2</th>
+        <th>引数3</th>
+        <th>引数4</th>
+        <th>説明</th>
+    </tr>
+
+    <tr>
+        <td>sub</td>
+        <td>—</td>
+        <td>1~4</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>サブルーチン n を実行する</td>
+    </tr>
+</table>
+
+<div class="code">
+    # サブルーチン1を実行する
+    sub 1
+
+    # サブルーチン3を実行する
+    sub 3
+</div>
+
+</div>
+
+
+</body>
+</html>

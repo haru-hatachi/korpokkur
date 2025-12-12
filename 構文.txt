@@ -90,7 +90,7 @@
     until n v s n //vがnと比べてsまでcをn回繰り返し(nがないならずっと)
         c
         //v:a~h s:<or>or== n:-128~127or変数 c:各命令
-<disp>
+<Disp>
     disp time //画面に時刻を表示する
     disp temp //画面に温度を表示する
     disp count //画面に秒カウンタを表示する
@@ -99,7 +99,7 @@
     disp v //画面に変数を表示する
         //v:a~h
     disp off //画面を消す
-<sub>
+<Sub>
     sub n //サブルーチンnを実行する
         //n:1~4
 
