@@ -1,16 +1,16 @@
 <LED>
-    led on,r,g,b //任意の色のLEDをつける
+    led on r g b //任意の色のLEDをつける
         //r:0~10 g:0~10 b:0~10
-    led time,r,g,b,t //任意の色のLEDを任意の時間つける
+    led time r g b t //任意の色のLEDを任意の時間つける
         //r:0~10 g:0~10 b:0~10 t:0.1~25.5
     led off //LEDをけす
-    led in,r,g,b,t //任意の色のLEDをだんだん任意の時間つける(前回の色からだんだん変化する)
+    led in r g b t //任意の色のLEDをだんだん任意の時間つける(前回の色からだんだん変化する)
         //r:0~10 g:0~10 b:0~10 t:0.1~25.5
-    led out,r,g,b,t //任意の色のLEDを任意の時間つけ、その後だんだん消えていく
+    led out r g b t //任意の色のLEDを任意の時間つけ、その後だんだん消えていく
         //r:0~10 g:0~10 b:0~10 t:0.1~25.5
 <Sound>
     beep n //任意の番号の音を鳴らす
-    beep play,a //trueなら連続で音をならす、falseなら音をならす
+    beep play a //trueなら連続で音をならす、falseなら音をならす
         //a:true,false
     beep stop //音を止める
 <Wait>
@@ -91,15 +91,15 @@
         c
         //v:a~h s:<or>or== n:-128~127or変数 c:各命令
 <disp>
-    disp time
-    disp temp
-    disp count
-    disp light
-    disp wait
-    disp v
+    disp time //画面に時刻を表示する
+    disp temp //画面に温度を表示する
+    disp count //画面に秒カウンタを表示する
+    disp light //画面に明るさを表示する
+    disp wait //画面にウェイト時間を表示する
+    disp v //画面に変数を表示する
         //v:a~h
 <sub>
-    sub n
+    sub n //サブルーチンnを実行する
         //n:1~4
 
 
