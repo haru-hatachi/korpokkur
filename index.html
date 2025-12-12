@@ -827,7 +827,7 @@ function saveFile(ext,inputname) {
                 code.push("  </BlockLoopEnd>")
                 code.push("</BlockLoopStart>")
 
-            }else if (woords[0] == "while") {
+            }else if (woords[0] == "until") {
                 code.push("<BlockLoopStart>")
                 code.push("  <LineCount>1</LineCount>")
                 indexes.push(String(code.length)+","+String(myindex)+","+String(i+2))
@@ -1052,6 +1052,8 @@ function saveFile(ext,inputname) {
                 }else if  (["a","b","c","d","e","f","g","h"].includes(woords[1])) {
                     code.push("  <Mode>VARIABLE</Mode>")
                     code.push("  <VariableIndex>"+(variable_number(woords[1]))+"</VariableIndex>")
+                }else if (woords[1] == "off") {
+                    code.push("  <Mode>MAX</Mode>")
                 }
                     
 

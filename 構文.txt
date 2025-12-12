@@ -51,43 +51,43 @@
     if v s n //vがnと比べてsなら
         c
         //v:a~h s:<or>or== n:-128~127or変数 c:各命令
-<else>
+<Else>
     else //直前のifがfalseならcを実行
         c
         //c:各命令
-<variable>
+<Variable>
     variable v s n
         //v:a~h s:+=or-=or= n:-128~127or変数
-<for>
+<For>
     for //ずっと繰り返す
     for n //n回繰り返す。
         //n:数値
-<while>
-    while n button o //ボタンがoまでcをn回繰り返し(nがないならずっと)
+<Until>
+    until n button o //ボタンがoまでcをn回繰り返し(nがないならずっと)
         c
         //o:on,off c:各命令
-    while n light s n //明るさがnと比べてsまでcをn回繰り返し(nがないならずっと)
+    until n light s n //明るさがnと比べてsまでcをn回繰り返し(nがないならずっと)
         c
         //s:<or>or== n:0~100or変数 c:各命令
-    while n sound o //音がoまでcをn回繰り返し(nがないならずっと)
+    until n sound o //音がoまでcをn回繰り返し(nがないならずっと)
         c
         //o:on,off c:各命令
-    while n alarm o //アラーム入力があるまでcをn回繰り返し(nがないならずっと)
+    until n alarm o //アラーム入力があるまでcをn回繰り返し(nがないならずっと)
         c
         //o:on,off c:各命令
-    while n timer o //タイマー入力があるまでcをn回繰り返し(nがないならずっと)
+    until n timer o //タイマー入力があるまでcをn回繰り返し(nがないならずっと)
         c
         //o:on,off c:各命令
-    while n time s n1 n2 //時刻がn1時n2分と比べてsまでcをn回繰り返し(nがないならずっと)
+    until n time s n1 n2 //時刻がn1時n2分と比べてsまでcをn回繰り返し(nがないならずっと)
         c
         //s:<or>or== n1:0~23 n2:0~59 c:各命令
-    while n temp s n //音温度がnと比べてsまでcをn回繰り返し(nがないならずっと)
+    until n temp s n //音温度がnと比べてsまでcをn回繰り返し(nがないならずっと)
         c
         //s:<or>or== n:-128~127or変数 c:各命令
-    while n count s n //秒カウンタがnと比べてまでcをn回繰り返し(nがないならずっと)
+    until n count s n //秒カウンタがnと比べてまでcをn回繰り返し(nがないならずっと)
         c
         //s:<or>or== n:0~255 c:各命令
-    while n v s n //vがnと比べてsまでcをn回繰り返し(nがないならずっと)
+    until n v s n //vがnと比べてsまでcをn回繰り返し(nがないならずっと)
         c
         //v:a~h s:<or>or== n:-128~127or変数 c:各命令
 <disp>
@@ -98,6 +98,7 @@
     disp wait //画面にウェイト時間を表示する
     disp v //画面に変数を表示する
         //v:a~h
+    disp off //画面を消す
 <sub>
     sub n //サブルーチンnを実行する
         //n:1~4
